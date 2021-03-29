@@ -1,28 +1,33 @@
-#include "stdint.h"
-#include "Modified_ISW.h"
 #include "stdio.h" //printf
-#include "stdlib.h"
+#include "stdlib.h" //srand()
 #include "time.h"
+#include "ISW_Belaid.h"
+
+
 //////////////////////////////////////////////////////////////////////
 int main(void)
 {
+
     time_t t;
     srand((unsigned) time(&t));
 
-    uint8_t a[NUM_SHARES];
-    uint8_t b[NUM_SHARES];
-    uint8_t operand_a = 0x53;
-    uint8_t operand_b = 0x10;
-    uint8_t c[NUM_SHARES];
+    uint8_t a = 0x43;
+    uint8_t b = 0xb9;
+    uint8_t c[Mask_ORD+1];
 
-    Mask(a, operand_a);
-    Mask(b, operand_b);
-    Modified_ISW_MULT(a, b, c);
+    ISW_Belaid_MULT(a, b, c);
 
     printf("Shares of the output:\n");
-    for (int i = 0; i < NUM_SHARES; i++)
+    for (int i = 0; i <= Mask_ORD; i++)
     {
-            printf(" %02x ", c[i]);
+        printf(" %02x ", c[i]);
     }
+    printf("\n \n The output:\n");
+    uint8_t output=0;
+    for (int i = 0; i <= Mask_ORD; i++)
+    {
+        output^=c[i];
+    }
+    printf(" %02x ", output);
 }
 
