@@ -5,7 +5,6 @@
 static uint8_t a[Mask_ORD+1];
 static uint8_t b[Mask_ORD+1];
 
-
 uint8_t gfMul(uint8_t a, uint8_t b)
 {
     int s = 0;
@@ -27,7 +26,6 @@ uint8_t gfMul(uint8_t a, uint8_t b)
     }
     return s;
 }
-
 
     void Mask(uint8_t y[Mask_ORD+1], uint8_t* x)
     {
