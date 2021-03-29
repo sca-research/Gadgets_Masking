@@ -3,11 +3,9 @@
 #include "time.h"
 #include "ISW.h"
 
-
 //////////////////////////////////////////////////////////////////////
 int main(void)
 {
-
     time_t t;
     srand((unsigned) time(&t));
 
