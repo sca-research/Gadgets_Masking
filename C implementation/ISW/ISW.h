@@ -1,19 +1,9 @@
 #include "stdint.h"
-
 #define Mask_ORD 3
 
-
 uint8_t gfMul(uint8_t a, uint8_t b);
-
 void Mask(uint8_t y[Mask_ORD+1], uint8_t* x);
-
 void Seminal_ISW(uint8_t* input_a, uint8_t* input_b, uint8_t* c);
-
-
-
-
-
-
 
 static const uint8_t table[798] = {
         0x00, 0x00, 0x19, 0x01, 0x32, 0x02, 0x1a, 0xc6, 0x4b, 0xc7, 0x1b, 0x68, 0x33, 0xee, 0xdf, 0x03,
