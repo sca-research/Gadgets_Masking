@@ -1,52 +1,91 @@
-#include "Modified_ISW.h"
 #include "stdint.h"
-#include "gfmul.h"
+#include "stdlib.h" //rand()
+#include "ISW_Belaid.h"
+
+static uint8_t a[Mask_ORD+1];
+static uint8_t b[Mask_ORD+1];
 
 
-
-void Modified_ISW_MULT(uint8_t* a, uint8_t* b, uint8_t* c)
+uint8_t gfMul(uint8_t a, uint8_t b)
 {
-    int i, j;
-    uint8_t r2[NUM_SHARES][NUM_SHARES];
-    uint8_t r1[NUM_SHARES];
-    uint8_t tij[NUM_SHARES][NUM_SHARES];
+    int s = 0;
+    s = table[a] + table[b];
+    int q;
+    /* Get the antilog */
+    s = table[s+256];
+    uint8_t z = 0;
+    q = s;
+    if(a == 0) {
+        s = z;
+    } else {
+        s = q;
+    }
+    if(b == 0) {
+        s = z;
+    } else {
+        q = z;
+    }
+    return s;
+}
 
-    for (i = 0; i < NUM_SHARES; i++)
+
+    void Mask(uint8_t y[Mask_ORD+1], uint8_t* x)
     {
-        for (j = 0; j < NUM_SHARES - i - 1; j+=2)
+        y[0] = x;
+        for(int i = 1; i <= Mask_ORD; i++)
         {
-            r2[i][NUM_SHARES - j] = getRand();
+            y[i]=  rand() % 256;
+            y[0] = y[0] ^ y[i];
         }
     }
-    for (j = NUM_SHARES - 1; j < 1; j-=2)
+
+
+    void ISW_Belaid_MULT(uint8_t* input_a, uint8_t* input_b, uint8_t* c)
     {
-        r1[] = getRand();
-    }
-    for (i = 0; i < NUM_SHARES; i++)
-    {
-        c[i] = gfMul(a[i], b[i]);
-        for (j = NUM_SHARES; j < i + 2; j-=2)
+        Mask(a, input_a);
+        Mask(b, input_b);
+        int i, j;
+        uint8_t r2[Mask_ORD+1][Mask_ORD+1];
+        uint8_t r1[Mask_ORD+1];
+        uint8_t temp[Mask_ORD+1][Mask_ORD+1];
+
+        for (i = 0; i <= Mask_ORD; i++)
         {
-            tij[i][j] = r2[i][j] ^ (gfMul(a[i], b[j])) ^ (gfMul(a[j], b[i]))^
-                    r1[j-1] ^ (gfMul(a[i], b[j-1])) ^ (gfMul(a[j-1], b[i]));
-            c[i] ^= tij[i][j];
-        }
-        if (!((i%2)&(d%2)))
-        {
-            tij[i][i+1] = r2[i][i+1] ^ (gfMul(a[i], b[i+1])) ^ (gfMul(a[i+1], b[i]));
-            if ((i%2)&1)
+            for (j = 0; j <= Mask_ORD-i-1; j+=2)
             {
-                c[i] ^= r1[i];
+                r2[i][Mask_ORD-j] = rand() % 256;
             }
         }
-        else
+        for (j = Mask_ORD-1; j >= 1; j-=2)
+        {
+            r1[j] = rand() % 256;
+        }
+        for (i = 0; i <=Mask_ORD; i++)
+        {
+            c[i] = gfMul(a[i], b[i]);
+            for (j = Mask_ORD; j >= i + 2; j-=2)
             {
-                for (j = i - 1; j < 0; j--)
+                temp[i][j] = r2[i][j] ^ (gfMul(a[i], b[j])) ^ (gfMul(a[j], b[i]))^
+                            r1[j-1] ^ (gfMul(a[i], b[j-1])) ^ (gfMul(a[j-1], b[i]));
+                c[i] ^= temp[i][j];
+            }
+            if (!((i%2)&((Mask_ORD)%2))) //(i%2) != (NUM_SHARES%2)
+            {
+                temp[i][i+1] = r2[i][i+1] ^ (gfMul(a[i], b[i+1])) ^ (gfMul(a[i+1], b[i]));
+                c[i] ^=temp[i][i+1];
+                if ((i%2)&1)
                 {
-                    c[i] ^= r2[i][j];
+                    c[i] ^= r1[i];
+                }
+            }
+            else
+            {
+                for (j = i-1; j >= 0; j--)
+                {
+                    c[i] ^= r2[j][i];
 
                 }
             }
 
+        }
     }
-}
