@@ -32,6 +32,7 @@ uint8_t gfMul(uint8_t a, uint8_t b)
     void Mask(uint8_t y[Mask_ORD+1], uint8_t* x)
     {
         y[0] = x;
+        
         for(int i = 1; i <= Mask_ORD; i++)
         {
             y[i]=  rand() % 256;
@@ -39,23 +40,14 @@ uint8_t gfMul(uint8_t a, uint8_t b)
         }
     }
 
-    void Refresh_Mask(uint8_t y[Mask_ORD+1], uint8_t x[Mask_ORD+1])
-    {
-        uint8_t tmp;
-        for (int i = 1; i <= Mask_ORD; i++) {
-            tmp = rand() % 256;
-            y[0] = x[0] ^ tmp;
-            y[i] = x[i] ^ tmp;
-        }
-    }
 
     void Seminal_ISW(uint8_t* input_a, uint8_t* input_b, uint8_t* c)
     {
         Mask(a, input_a);
         Mask(b, input_b);
-        Refresh_Mask(a,a);
-        Refresh_Mask(b,b);
+
         int i, j;
+ 
         uint8_t r[Mask_ORD+1][Mask_ORD+1];
         uint8_t u[Mask_ORD+1][Mask_ORD+1];
 
@@ -69,6 +61,7 @@ uint8_t gfMul(uint8_t a, uint8_t b)
                 u[j][i] = (r[i][j] ^ gfMul(a[j], b[i]));
             }
         }
+        
         for (i = 0; i < Mask_ORD+1; i++)
         {
             c[i]= gfMul(a[i], b[i]);
