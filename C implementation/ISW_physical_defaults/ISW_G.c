@@ -65,6 +65,7 @@ uint8_t gfMul(uint8_t a, uint8_t b)
         for (i = 0; i < Mask_ORD+1; i++)
         {
             c[i]= gfMul(a[i], b[i]);
+            
             for (j = 0; j < Mask_ORD+1; j++)
             {
                 if (i != j)
