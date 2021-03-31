@@ -48,6 +48,7 @@ uint8_t gfMul(uint8_t a, uint8_t b)
             y[0] = x[0] ^ tmp;
             y[i] = x[i] ^ tmp;
         }
+    }
 
 
     void Seminal_ISW(uint8_t* input_a, uint8_t* input_b, uint8_t* c)
