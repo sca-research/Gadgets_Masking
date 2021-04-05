@@ -1,3 +1,5 @@
+//Adding register for Glitch-Resistant
+
 #include "stdint.h"
 #include "stdlib.h" //rand()
 #include "ISW_G.h"
