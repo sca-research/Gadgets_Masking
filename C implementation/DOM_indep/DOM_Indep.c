@@ -50,7 +50,6 @@ static uint8_t b[Mask_ORD+1];
         int i, j;
         int all_terms = Mask_ORD * (Mask_ORD+1)/2;
         uint8_t r[all_terms];
-        uint8_t all_product[all_terms];
         uint8_t reg[all_terms];
 
         for (i = 0; i < all_terms; i++){
@@ -61,9 +60,6 @@ static uint8_t b[Mask_ORD+1];
                 for (j = 0; j < Mask_ORD + 1; j++){
                     int p = (Mask_ORD + 1) * i + j;
 
-/*                    if (i == j){
-                        all_product[p] = gfMul(a[i], b[j]);
-                    }*/
                     if (j > i){
                         reg[p] = (gfMul(a[i], b[j])) ^ r[i + (j*(j-1)/2)];
                     }
