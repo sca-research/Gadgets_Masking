@@ -1,3 +1,7 @@
+// DOM-indep Eq.6 in "An Efficient Side-Channel Protected AES Implementation with Arbitrary Protection Order"
+
+
+
 #include "stdint.h"
 #include "stdlib.h" //rand()
 #include "DOM_Indep.h"
