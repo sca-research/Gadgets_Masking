@@ -1,31 +1,79 @@
-#include "stdio.h" //printf
-#include "stdlib.h" //srand()
-#include "time.h"
+// DOM-indep Eq.6 in "An Efficient Side-Channel Protected AES Implementation with Arbitrary Protection Order"
+
+
+
+#include "stdint.h"
+#include "stdlib.h" //rand()
 #include "DOM_Indep.h"
 
-//////////////////////////////////////////////////////////////////////
-int main(void)
-{
-    time_t t;
-    srand((unsigned) time(&t));
+static uint8_t a[Mask_ORD+1];
+static uint8_t b[Mask_ORD+1];
 
-    uint8_t a = 0x20;
-    uint8_t b = 0x10;
-    uint8_t c[Mask_ORD+1];
-
-    DOM_independent(a, b, c);
-
-    printf("Shares of the output:\n");
-    for (int i = 0; i <= Mask_ORD; i++)
+    uint8_t gfMul(uint8_t a, uint8_t b)
     {
-        printf(" %02x ", c[i]);
+        int s = 0;
+        s = table[a] + table[b];
+        int q;
+        /* Get the antilog */
+        s = table[s+256];
+        uint8_t z = 0;
+        q = s;
+        if(a == 0) {
+            s = z;
+        } else {
+            s = q;
+        }
+        if(b == 0) {
+            s = z;
+        } else {
+            q = z;
+        }
+        return s;
     }
-    printf("\n \n The output:\n");
-    uint8_t output=0;
-    for (int i = 0; i <= Mask_ORD; i++)
-    {
-        output^=c[i];
-    }
-    printf(" %02x ", output);
-}
 
+
+    void Mask(uint8_t y[Mask_ORD+1], uint8_t* x)
+    {
+        y[0] = x;
+        for(int i = 1; i <= Mask_ORD; i++)
+        {
+            y[i]=  rand() % 256;
+            y[0] = y[0] ^ y[i];
+        }
+    }
+
+
+    void DOM_independent(uint8_t* input_a, uint8_t* input_b, uint8_t* c){
+        Mask(a, input_a);
+        Mask(b, input_b);
+
+        int i, j;
+        int all_terms = Mask_ORD * (Mask_ORD+1)/2;
+        uint8_t r[all_terms];
+        uint8_t reg[2*all_terms];
+
+        for (i = 0; i < all_terms; i++){
+            r [i]= rand() % 256;
+        }
+            for (i = 0; i < Mask_ORD + 1; i++){
+                uint8_t output = 0;
+                for (j = 0; j < Mask_ORD + 1; j++){
+                    int p = (Mask_ORD + 1) * i + j;
+                    if (i == j){
+                        output = output ^  gfMul(a[i],b[j]);
+                    }
+                    if (j > i){
+                        reg[p] = (gfMul(a[i], b[j])) ^ r[i + (j*(j-1)/2)];
+                    }
+                    else{
+                        reg[p] = (gfMul(a[i], b[j])) ^ r[j + (i*(i-1)/2)];
+                    }
+                     if (i!=j){
+
+                        output = output ^ reg[p];
+                    }
+                }
+                c[i] = output;
+            }
+
+    }
