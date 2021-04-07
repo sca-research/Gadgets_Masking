@@ -56,11 +56,11 @@ static uint8_t b[Mask_ORD+1];
             r [i]= rand() % 256;
         }
             for (i = 0; i < Mask_ORD + 1; i++){
-                uint8_t result = 0;
+                uint8_t output = 0;
                 for (j = 0; j < Mask_ORD + 1; j++){
                     int p = (Mask_ORD + 1) * i + j;
                     if (i == j){
-                        result = result ^  gfMul(a[i],b[j]);
+                        output = output ^  gfMul(a[i],b[j]);
                     }
                     if (j > i){
                         reg[p] = (gfMul(a[i], b[j])) ^ r[i + (j*(j-1)/2)];
@@ -70,10 +70,10 @@ static uint8_t b[Mask_ORD+1];
                     }
                      if (i!=j){
 
-                        result = result ^ reg[p];
+                        output = output ^ reg[p];
                     }
                 }
-                c[i] = result;
+                c[i] = output;
             }
 
     }
