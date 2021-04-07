@@ -33,10 +33,10 @@ int main(void)
         printf(" \n Unmasked_c = a * b: %02x \n     Mask_c = a * b: %02x ",gfMul(a,b) , output);
 
         if (output != gmul(a, b)) {
-            printf(" \n Error for inputs : a = %02x", a, "b = %02x", b);
+            printf(" \n Error for inputs : a = %02x , b = %02x and Num_shares: %0d \n", a, b, Mask_ORD+1);
         }
         else{
-            printf(" \n\n Mask_c = Unmasked_c");
+            printf(" \nMask_c = Unmasked_c \n");
 
         }
     }
