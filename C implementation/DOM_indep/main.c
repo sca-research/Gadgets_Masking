@@ -21,7 +21,7 @@ int main(void)
         DOM_independent(a, b, c);
 
 
-        printf("\n  -------------------------Number of shares: %0d", Mask_ORD+1);
+       // printf("\n  -------------------------Number of shares: %0d", Mask_ORD+1);
 /*        for (int i = 0; i <= Mask_ORD; i++) {
             printf(" %02x ", c[i]);
         }*/
@@ -29,14 +29,16 @@ int main(void)
         for (int i = 0; i <= Mask_ORD; i++) {
             output ^= c[i];
         }
+/*
         printf(" \n a: %02x  \n b: %02x", a, b );
         printf(" \n Unmasked_c = a * b: %02x \n     Mask_c = a * b: %02x ",gfMul(a,b) , output);
+*/
 
         if (output != gmul(a, b)) {
             printf(" \n Error for inputs : a = %02x , b = %02x and Num_shares: %0d \n", a, b, Mask_ORD+1);
         }
         else{
-            printf(" \nMask_c = Unmasked_c \n");
+            //printf(" \nMask_c = Unmasked_c \n");
 
         }
     }
