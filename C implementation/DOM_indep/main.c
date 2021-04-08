@@ -38,7 +38,7 @@ int main(void)
             printf(" \n Error for inputs : a = %02x , b = %02x and Num_shares: %0d \n", a, b, Mask_ORD+1);
         }
         else{
-            //printf(" \nMask_c = Unmasked_c \n");
+            printf(" CORRECT  ");
 
         }
     }
