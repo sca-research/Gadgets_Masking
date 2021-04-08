@@ -40,8 +40,7 @@ int main(void)
 
         }
         else{
-            //printf(" \nMask_c = Unmasked_c \n");
-
+            printf("CORRECT");
         }
     }
 }
