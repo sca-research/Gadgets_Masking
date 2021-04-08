@@ -1,5 +1,5 @@
 #include "stdint.h"
-#define Mask_ORD 8
+#define Mask_ORD 8 //Mask_ORD >= 2
 
 
 uint8_t gfMul(uint8_t a, uint8_t b);
