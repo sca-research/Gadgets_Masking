@@ -40,7 +40,7 @@ int main(void)
 
         }
         else{
-            printf("CORRECT");
+            printf("  CORRECT  ");
         }
     }
 }
