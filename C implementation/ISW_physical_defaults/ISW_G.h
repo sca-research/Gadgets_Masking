@@ -1,6 +1,8 @@
 #include "stdint.h"
 
+#ifndef Mask_ORD
 #define Mask_ORD 3
+#endif
 
 uint8_t gfMul(uint8_t a, uint8_t b);
 
