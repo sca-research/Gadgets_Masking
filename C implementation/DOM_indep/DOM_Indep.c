@@ -1,13 +1,42 @@
 // DOM-indep Eq.6 in "An Efficient Side-Channel Protected AES Implementation with Arbitrary Protection Order"
 
-
-
 #include "stdint.h"
-#include "stdlib.h" //rand()
 #include "DOM_Indep.h"
 
-static uint8_t a[Mask_ORD+1];
-static uint8_t b[Mask_ORD+1];
+    /*
+    DOM_independent(INPUT: a[Mask_ORD+1], INPUT: b[Mask_ORD+1], INPUT: rnd[Mask_ORD * (Mask_ORD+1)/2], OUTPUT: c[Mask_ORD])
+    c = a * b
+    rnd: random numbers (on_the_fly)*/
+    void DOM_independent(uint8_t* input_a, uint8_t* input_b, uint8_t* rnd, uint8_t* c){
+        int i, j;
+        // The number of randomness in DOM_indep multiplication gadget
+        int rand_n = Mask_ORD * (Mask_ORD+1)/2;
+
+        uint8_t cross_product[2*rand_n];
+
+        for (i = 0; i < Mask_ORD + 1; i++){
+            uint8_t output = 0;
+            for (j = 0; j < Mask_ORD + 1; j++){
+                int p = (Mask_ORD ) * i + j;
+                if (i == j){
+                    // Inner_products
+                    output = output ^  gfMul(input_a[i], input_b[j]);
+                }
+                else if (j > i){
+                    cross_product[p] = (gfMul(input_a[i], input_b[j])) ^ rnd[i + (j*(j-1)/2)];
+                }
+                else{
+                    cross_product[p] = (gfMul(input_a[i], input_b[j])) ^ rnd[j + (i*(i-1)/2)];
+                }
+                 if (i!=j){
+
+                    output = output ^ cross_product[p];
+                }
+            }
+            c[i] = output;
+        }
+    }
+
 
     uint8_t gfMul(uint8_t a, uint8_t b)
     {
@@ -29,51 +58,4 @@ static uint8_t b[Mask_ORD+1];
             q = z;
         }
         return s;
-    }
-
-
-    void Mask(uint8_t y[Mask_ORD+1], uint8_t* x)
-    {
-        y[0] = x;
-        for(int i = 1; i <= Mask_ORD; i++)
-        {
-            y[i]=  rand() % 256;
-            y[0] = y[0] ^ y[i];
-        }
-    }
-
-
-    void DOM_independent(uint8_t* input_a, uint8_t* input_b, uint8_t* c){
-        Mask(a, input_a);
-        Mask(b, input_b);
-
-        int i, j;
-        int all_terms = Mask_ORD * (Mask_ORD+1)/2;
-        uint8_t r[all_terms];
-        uint8_t reg[2*all_terms];
-
-        for (i = 0; i < all_terms; i++){
-            r [i]= rand() % 256;
-        }
-            for (i = 0; i < Mask_ORD + 1; i++){
-                uint8_t output = 0;
-                for (j = 0; j < Mask_ORD + 1; j++){
-                    int p = (Mask_ORD + 1) * i + j;
-                    if (i == j){
-                        output = output ^  gfMul(a[i],b[j]);
-                    }
-                    if (j > i){
-                        reg[p] = (gfMul(a[i], b[j])) ^ r[i + (j*(j-1)/2)];
-                    }
-                    else{
-                        reg[p] = (gfMul(a[i], b[j])) ^ r[j + (i*(i-1)/2)];
-                    }
-                     if (i!=j){
-
-                        output = output ^ reg[p];
-                    }
-                }
-                c[i] = output;
-            }
-
     }
