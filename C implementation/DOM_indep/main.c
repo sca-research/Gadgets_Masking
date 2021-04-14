@@ -6,6 +6,9 @@
 #include "DOM_Indep.h"
 
 uint8_t gmul(uint8_t a, uint8_t b);
+void Mask(uint8_t* y, uint8_t x);
+// The number of randomness in DOM_indep multiplication gadget
+int rnd_n = Mask_ORD * (Mask_ORD+1) /2;
 
 //////////////////////////////////////////////////////////////////////
 int main(void)
@@ -13,36 +16,65 @@ int main(void)
     time_t t;
     srand((unsigned) time(&t));
 
-    for (int i = 0; i < 1000; i++) {
-        uint8_t a = rand() % 256;
-        uint8_t b = rand() % 256;
+    for (int i = 0; i < 100; i++) {
+
+        // Input shares of the Gadget (a=a_0,a_1,...,a_d and b=b_0,b_1,...,b_d)
+        static uint8_t a[Mask_ORD+1];
+        static uint8_t b[Mask_ORD+1];
+        // Different and random inputs
+        uint8_t input_a = rand() % 256;
+        uint8_t input_b = rand() % 256;
+
+        Mask(a, input_a);
+        Mask(b, input_b);
+
+        // Output of the Gadget is c_0, c_1, ..., c_d such that c_0 + c_1 + ... + c_d = c (c=a*b)
         uint8_t c[Mask_ORD + 1];
 
-        DOM_independent(a, b, c);
+        // Random number: on_the_fly
+        uint8_t rnd_f[rnd_n];
+        for (int k = 0; k <rnd_n; k++){
+            rnd_f[k] = rand() % 256;
+           //printf( "  %02x  ", rnd_f[k]);
+        }
 
+        /*
+        DOM_independent(INPUT: a[Mask_ORD+1], INPUT: b[Mask_ORD+1], INPUT: rnd[Mask_ORD * (Mask_ORD+1)/2], OUTPUT: c[Mask_ORD])
+        c = a * b
+        rnd: random numbers (on_the_fly)*/
+        DOM_independent(a, b, rnd_f, c);
 
-       // printf("\n  -------------------------Number of shares: %0d", Mask_ORD+1);
-/*        for (int i = 0; i <= Mask_ORD; i++) {
-            printf(" %02x ", c[i]);
-        }*/
+        // Verifying the Gadget
+        // Comparing the output of the Gadget with the unmasked multiplication
         uint8_t output = 0;
         for (int i = 0; i <= Mask_ORD; i++) {
             output ^= c[i];
         }
-/*
-        printf(" \n a: %02x  \n b: %02x", a, b );
-        printf(" \n Unmasked_c = a * b: %02x \n     Mask_c = a * b: %02x ",gfMul(a,b) , output);
-*/
 
-        if (output != gmul(a, b)) {
-            printf(" \n Error for inputs : a = %02x , b = %02x and Num_shares: %0d \n", a, b, Mask_ORD+1);
+       // printf(" \n a: %02x  \n b: %02x", a, b );
+       //printf(" \n Unmasked_c = a * b: %02x \n     Mask_c = a * b: %02x ",gfMul(input_a,input_b) , output);
+
+
+        if (output != gmul(input_a, input_b)) {
+            printf(" \n Error: a = %02x , b = %02x and Num_shares: %0d \n", input_a, input_b, Mask_ORD+1);
         }
         else{
-            printf(" CORRECT  ");
+            printf(" CORRECT ");
 
         }
     }
 }
+
+void Mask(uint8_t* y, uint8_t x)
+{
+    y[0] = x;
+    for(int i = 1; i <= Mask_ORD; i++)
+    {
+        y[i]=  rand() % 256;
+        y[0] = y[0] ^ y[i];
+    }
+}
+
 
 // Cite https://en.wikipedia.org/wiki/Finite_field_arithmetic
 /*
