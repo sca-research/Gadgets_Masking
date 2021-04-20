@@ -34,7 +34,7 @@ int main(void)
 
         // Verifying the RefreshMasks
         uint8_t output = 0;
-        for (int i = 0; i <= Mask_ORD+1; i++) {
+        for (int i = 0; i <= Mask_ORD; i++) {
             output ^= d[i];
         }
         printf("\nOUT %02x", output);
