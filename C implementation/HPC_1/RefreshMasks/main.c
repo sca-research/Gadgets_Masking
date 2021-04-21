@@ -1,4 +1,4 @@
-/*Here the correctness of the gadget is checked with random inputs (a and b).*/
+/*Here the correctness of the RefreshMasks is checked with random inputs.*/
 #include "Ref_Mask.h"
 
 void Mask(uint8_t* y, uint8_t x);
@@ -6,7 +6,7 @@ void Mask(uint8_t* y, uint8_t x);
 //////////////////////////////////////////////////////////////////////
 int main(void)
 {
-// The number of randomness in DOM_indep multiplication gadget
+// The number of randomness in RefresfMasks
     int rnd_n = ((Mask_ORD+1) * log(Mask_ORD+1)) +1 ;
 
     time_t t;
