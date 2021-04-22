@@ -1,0 +1,160 @@
+/*
+ Optimized RefreshMasks: Fig.4  in "Hardware Private Circuits: From Trivial Composition to Full Verification"
+*/
+
+#include "Opt_Ref_Mask.h"
+#include "string.h" // memcpy func
+
+/* Func for computing  s^i + (s^i >> n)
+ *  s^i >> n, rotates to the right the s^i vector in the way that first element goes to n+1 th element
+Using for: the input s^i is an array and array are stored in memory continuously */
+/*void  si_xor_rotated_si(int Num_shares: d_sh, int num_rotation: r, uint8_t* rnd: randomness, uint8_t* t: output);
+uint8_t* rnd has rnd_n elements, that the first (Mask_ORD+1: d_shares) elements [0: Mask_ORD(d_shares-1)] are used in s^i
+ an the rest are used as r_i */
+
+void  si_xor_rotated_si(int d_sh, int r, uint8_t* rnd_vec, int ind_start, int ind_end, uint8_t* t);
+//////////////////////////////////////////////////////////////////////
+void opt_refresh_mask(uint8_t* a, int Mask_order, uint8_t* rnd, uint8_t* d){
+
+
+    static uint8_t reg_shares[Mask_ORD+1]; // Register for refreshed shares
+    static uint8_t t_reg_rnd0[Mask_ORD+1]; // Register for new randomness
+    static uint8_t t_reg_rnd1[Mask_ORD+1]; // Register for new randomness
+
+
+    int d_shares = Mask_order +1; // Number of shares
+
+    if (d_shares == 2){
+        t_reg_rnd0[0] = rnd[0];
+        t_reg_rnd0[1] = a[1] ^ rnd[1];
+    }
+
+    if (d_shares == 3){
+        t_reg_rnd0[0] = rnd[0];
+        t_reg_rnd0[1] = rnd[1];
+        t_reg_rnd0[2] = rnd[0] ^ rnd[1];
+    }
+
+    if (d_shares == 4 | d_shares == 5) {
+        si_xor_rotated_si(d_shares,1, rnd,0, d_shares, t_reg_rnd0);
+    }
+
+    if (d_shares == 6) {
+        si_xor_rotated_si(d_shares, 1, rnd,0, d_shares, t_reg_rnd0);
+        t_reg_rnd0[0] ^= rnd[d_shares];
+        //t_reg_rnd0[1]
+        //t_reg_rnd0[2]
+        t_reg_rnd0[3] ^= rnd[d_shares];
+    }
+
+    if (d_shares == 7) {
+        si_xor_rotated_si(d_shares, 1, rnd,0, d_shares, t_reg_rnd0);
+        t_reg_rnd0[0] ^= rnd[d_shares];
+        //t_reg_rnd0[1]
+        t_reg_rnd0[2] ^= rnd[d_shares+1];
+        //t_reg_rnd0[3]
+        t_reg_rnd0[4] ^= rnd[d_shares];
+        //t_reg_rnd0[5]
+        t_reg_rnd0[6] ^= rnd[d_shares+1];
+    }
+
+    if (d_shares == 8) {
+        si_xor_rotated_si(d_shares, 1, rnd,0, d_shares, t_reg_rnd0);
+        t_reg_rnd0[0] ^= rnd[d_shares];
+        t_reg_rnd0[1] ^= rnd[d_shares+1];
+        t_reg_rnd0[2] ^= rnd[d_shares+2];
+        //t_reg_rnd0[3]
+        t_reg_rnd0[4] ^= rnd[d_shares];
+        t_reg_rnd0[5] ^= rnd[d_shares+1];
+        t_reg_rnd0[6] ^= rnd[d_shares+2];
+        //t_reg_rnd0[7]
+    }
+
+    if (d_shares == 9) {
+        si_xor_rotated_si(d_shares, 1, rnd,0, d_shares, t_reg_rnd0);
+        t_reg_rnd0[0] ^= rnd[d_shares];
+        t_reg_rnd0[1] ^= rnd[d_shares+1];
+        //t_reg_rnd0[2]
+        t_reg_rnd0[3] ^= rnd[d_shares+2];
+        t_reg_rnd0[4] ^= rnd[d_shares];
+        //t_reg_rnd0[5]
+        t_reg_rnd0[6] ^= rnd[d_shares+1];
+        t_reg_rnd0[7] ^= rnd[d_shares+2];
+        //t_reg_rnd0[8]
+    }
+
+    if (d_shares == 10) {
+        si_xor_rotated_si(d_shares, 1, rnd,0, d_shares, t_reg_rnd0);
+        t_reg_rnd0[0] ^= rnd[d_shares];
+        t_reg_rnd0[1] ^= rnd[d_shares+1];
+        t_reg_rnd0[2] ^= rnd[d_shares+2];
+        t_reg_rnd0[3] ^= rnd[d_shares+3];
+        t_reg_rnd0[4] ^= rnd[d_shares+4];
+        t_reg_rnd0[5] ^= rnd[d_shares];
+        t_reg_rnd0[6] ^= rnd[d_shares+1];
+        t_reg_rnd0[7] ^= rnd[d_shares+2];
+        t_reg_rnd0[8] ^= rnd[d_shares+3];
+        t_reg_rnd0[9] ^= rnd[d_shares+4];
+        //t_reg_rnd0[10]
+    }
+
+
+    if (d_shares == 11) {
+        si_xor_rotated_si(d_shares, 1, rnd,0, d_shares, t_reg_rnd0);
+        t_reg_rnd0[0]  ^= rnd[d_shares];
+        t_reg_rnd0[1]  ^= rnd[d_shares+1];
+        t_reg_rnd0[2]  ^= rnd[d_shares+2];
+        t_reg_rnd0[3]  ^= rnd[d_shares+3];
+        t_reg_rnd0[4]  ^= rnd[d_shares+4];
+        t_reg_rnd0[5]  ^= rnd[d_shares];
+        t_reg_rnd0[6]  ^= rnd[d_shares+1];
+        t_reg_rnd0[7]  ^= rnd[d_shares+2] ^ rnd[d_shares+5];
+        t_reg_rnd0[8]  ^= rnd[d_shares+3];
+        t_reg_rnd0[9]  ^= rnd[d_shares+4];
+        t_reg_rnd0[10] ^= rnd[d_shares+5];
+        //t_reg_rnd0[11]
+    }
+
+    if (d_shares == 12) {
+        si_xor_rotated_si(d_shares, 1, rnd,0, d_shares, t_reg_rnd0);
+        t_reg_rnd0[0]  ^= rnd[d_shares];
+        t_reg_rnd0[1]  ^= rnd[d_shares+1];
+        t_reg_rnd0[2]  ^= rnd[d_shares+2] ^ rnd[d_shares+6];
+        t_reg_rnd0[3]  ^= rnd[d_shares+3];
+        t_reg_rnd0[4]  ^= rnd[d_shares+4];
+        t_reg_rnd0[5]  ^= rnd[d_shares+5] ^ rnd[d_shares+6];
+        t_reg_rnd0[6]  ^= rnd[d_shares];
+        t_reg_rnd0[7]  ^= rnd[d_shares+1];
+        t_reg_rnd0[8]  ^= rnd[d_shares+2] ^ rnd[d_shares+7];
+        t_reg_rnd0[9]  ^= rnd[d_shares+3];
+        t_reg_rnd0[10] ^= rnd[d_shares+4];
+        t_reg_rnd0[11] ^= rnd[d_shares+5] ^ rnd[d_shares+7];
+        //t_reg_rnd0[12]
+    }
+
+    if (12 < d_shares && d_shares < 17) {
+        si_xor_rotated_si(d_shares, 1, rnd, 0, d_shares, t_reg_rnd0);
+        si_xor_rotated_si(d_shares, 3, rnd, d_shares, (2*d_shares)-1 , t_reg_rnd1);
+        for (int i=0; i< d_shares; i++){
+            t_reg_rnd0[i] ^= t_reg_rnd1[i];
+        }
+    }
+
+
+
+    for (int i=0; i< d_shares; i++){
+        reg_shares[i] = a[i] ^ t_reg_rnd0[i];
+    }
+    memcpy(d,reg_shares,sizeof reg_shares);
+
+}
+
+void  si_xor_rotated_si(int d_sh, int r, uint8_t* rnd_vec, int ind_start, int ind_end, uint8_t* t) {
+    for (int j=0; j<r; j++){
+        t[j] = rnd_vec[ind_start] ^ rnd_vec[ind_end-r];
+    }
+    for (int i=r; i<= (d_sh-r); i++){
+        t[i] = rnd_vec[i+ind_start] ^ rnd_vec[i-r-d_sh];
+    }
+}
+
