@@ -19,21 +19,26 @@ void opt_refresh_mask(uint8_t* a, int Mask_order, uint8_t* rnd, uint8_t* d){
     int d_shares = Mask_order +1; // Number of shares
 
     if (d_shares == 2){
+     //  uint8_t* rnd: 2 elements
         t_reg_rnd0[0] = rnd[0];
         t_reg_rnd0[1] = a[1] ^ rnd[1];
     }
 
     if (d_shares == 3){
+     //  uint8_t* rnd: 3 elements
         t_reg_rnd0[0] = rnd[0];
         t_reg_rnd0[1] = rnd[1];
         t_reg_rnd0[2] = rnd[0] ^ rnd[1];
     }
 
     if (d_shares == 4 | d_shares == 5) {
+     //  uint8_t* rnd: 4 , 5 elements
         si_xor_rotated_si(d_shares,1, rnd,0, d_shares, t_reg_rnd0);
     }
 
     if (d_shares == 6) {
+     //  uint8_t* rnd: 7 elements --> s^0 = rnd[0:5], r_i = rnd[7]
+     
         si_xor_rotated_si(d_shares, 1, rnd,0, d_shares, t_reg_rnd0);
         t_reg_rnd0[0] ^= rnd[d_shares];
         //t_reg_rnd0[1]
@@ -44,6 +49,7 @@ void opt_refresh_mask(uint8_t* a, int Mask_order, uint8_t* rnd, uint8_t* d){
     }
 
     if (d_shares == 7) {
+     //  uint8_t* rnd: 9 elements --> s^0 = rnd[0:6], r_i = rnd[7:8]
         si_xor_rotated_si(d_shares, 1, rnd,0, d_shares, t_reg_rnd0);
         t_reg_rnd0[0] ^= rnd[d_shares];
         //t_reg_rnd0[1]
@@ -55,6 +61,7 @@ void opt_refresh_mask(uint8_t* a, int Mask_order, uint8_t* rnd, uint8_t* d){
     }
 
     if (d_shares == 8) {
+     //  uint8_t* rnd: 11 elements --> s^0 = rnd[0:7], r_i = rnd[8:10]
         si_xor_rotated_si(d_shares, 1, rnd,0, d_shares, t_reg_rnd0);
         t_reg_rnd0[0] ^= rnd[d_shares];
         t_reg_rnd0[1] ^= rnd[d_shares+1];
@@ -67,6 +74,7 @@ void opt_refresh_mask(uint8_t* a, int Mask_order, uint8_t* rnd, uint8_t* d){
     }
 
     if (d_shares == 9) {
+     //  uint8_t* rnd: 12 elements --> s^0 = rnd[0:8], r_i = rnd[9:11]
         si_xor_rotated_si(d_shares, 1, rnd,0, d_shares, t_reg_rnd0);
         t_reg_rnd0[0] ^= rnd[d_shares];
         t_reg_rnd0[1] ^= rnd[d_shares+1];
@@ -80,6 +88,7 @@ void opt_refresh_mask(uint8_t* a, int Mask_order, uint8_t* rnd, uint8_t* d){
     }
 
     if (d_shares == 10) {
+     //  uint8_t* rnd: 15 elements --> s^0 = rnd[0:9], r_i = rnd[10:14]
         si_xor_rotated_si(d_shares, 1, rnd,0, d_shares, t_reg_rnd0);
         t_reg_rnd0[0] ^= rnd[d_shares];
         t_reg_rnd0[1] ^= rnd[d_shares+1];
@@ -95,6 +104,7 @@ void opt_refresh_mask(uint8_t* a, int Mask_order, uint8_t* rnd, uint8_t* d){
 
 
     if (d_shares == 11) {
+     //  uint8_t* rnd: 17 elements --> s^0 = rnd[0:10], r_i = rnd[10:16]
         si_xor_rotated_si(d_shares, 1, rnd,0, d_shares, t_reg_rnd0);
         t_reg_rnd0[0]  ^= rnd[d_shares];
         t_reg_rnd0[1]  ^= rnd[d_shares+1];
@@ -110,6 +120,7 @@ void opt_refresh_mask(uint8_t* a, int Mask_order, uint8_t* rnd, uint8_t* d){
     }
 
     if (d_shares == 12) {
+     //  uint8_t* rnd: 20 elements --> s^0 = rnd[0:11], r_i = rnd[12:19]
         si_xor_rotated_si(d_shares, 1, rnd,0, d_shares, t_reg_rnd0);
         t_reg_rnd0[0]  ^= rnd[d_shares];
         t_reg_rnd0[1]  ^= rnd[d_shares+1];
@@ -126,6 +137,7 @@ void opt_refresh_mask(uint8_t* a, int Mask_order, uint8_t* rnd, uint8_t* d){
     }
 
     if (12 < d_shares && d_shares < 17) {
+     //  uint8_t* rnd: 2*d_shares elements --> s^0 = rnd[0:d_shares -1], r_i = s^1 = rnd[d_shares:2*d_shares -1]
         si_xor_rotated_si(d_shares, 1, rnd, 0, d_shares, t_reg_rnd0);
         si_xor_rotated_si(d_shares, 3, rnd, d_shares, (2*d_shares) , t_reg_rnd1);
         for (int i=0; i< d_shares; i++){
