@@ -13,7 +13,7 @@
     * works for any field : this program is for field: 2^3=8
     *
         rnd_DOM: Mask_ORD * (Mask_ORD+1) /2;
-        rnd_DOM: Func --> rnd_number(int Mask_order);
+        rnd_Ref: Func --> rnd_number(int Mask_order);
         */
 
 ////////////////////////////////////////////////
