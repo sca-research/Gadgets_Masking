@@ -47,6 +47,7 @@ int main(void)
         printf("\nin %02x", input_a);
         if(output != input_a){
             printf("\n!!!!!!!!!!!!!!!!!! ERROR:Not equal\n");
+            break;
         }
         printf("\n++++++++++++++++++++++\n");
 
