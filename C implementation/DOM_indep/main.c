@@ -24,7 +24,8 @@ int main(void)
         // Different and random inputs
         uint8_t input_a = rand() % 256;
         uint8_t input_b = rand() % 256;
-
+        
+        // Input shares of the Gadget (a=a_0,a_1,...,a_d and b=b_0,b_1,...,b_d)
         Mask(a, input_a);
         Mask(b, input_b);
 
@@ -53,14 +54,11 @@ int main(void)
 
        // printf(" \n a: %02x  \n b: %02x", a, b );
        //printf(" \n Unmasked_c = a * b: %02x \n     Mask_c = a * b: %02x ",gfMul(input_a,input_b) , output);
-
-
         if (output != gmul(input_a, input_b)) {
             printf(" \n Error: a = %02x , b = %02x and Num_shares: %0d \n", input_a, input_b, Mask_ORD+1);
         }
         else{
             printf(" CORRECT ");
-
         }
     }
 }
