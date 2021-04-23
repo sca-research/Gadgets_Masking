@@ -8,7 +8,7 @@
 
 void  si_xor_rotated_si(int d_sh, int r, uint8_t* rnd_vec, int ind_start, int ind_end, uint8_t* t);
 //////////////////////////////////////////////////////////////////////
-void opt_refresh_mask(uint8_t* a, int Mask_order, uint8_t* rnd, uint8_t* d){
+void opt_refresh_mask(uint8_t* a, uint8_t* rnd, uint8_t* d){
 
 
     static uint8_t reg_shares[Mask_ORD+1]; // Register for refreshed shares
@@ -16,7 +16,7 @@ void opt_refresh_mask(uint8_t* a, int Mask_order, uint8_t* rnd, uint8_t* d){
     static uint8_t t_reg_rnd1[Mask_ORD+1]; // Register for new randomness when 13<= d_sh <= 16
 
 
-    int d_shares = Mask_order +1; // Number of shares
+    int d_shares = Mask_ORD +1; // Number of shares
 
     if (d_shares == 2){
      //  uint8_t* rnd: 2 elements
