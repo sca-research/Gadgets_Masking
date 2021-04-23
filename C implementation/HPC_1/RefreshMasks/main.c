@@ -1,5 +1,10 @@
 /*Here the correctness of the RefreshMasks is checked with random inputs.*/
 #include "Ref_Mask.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include "time.h"
+#include "math.h"
 
 void Mask(uint8_t* y, uint8_t x);
 
