@@ -1,9 +1,5 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 #include <stdint.h>
-#include "time.h"
-#include "math.h"
+
 #define Mask_ORD 4
 
 
