@@ -4,7 +4,7 @@
 #include "DOM_Indep.h"
 
     /*
-    DOM_independent(INPUT: input_a[Mask_ORD+1], INPUT: input_b[Mask_ORD+1], INPUT: rnd[Mask_ORD * (Mask_ORD+1)/2], OUTPUT: c[Mask_ORD])
+    DOM_independent(INPUT: input_a[Mask_ORD+1], INPUT: input_b[Mask_ORD+1], INPUT: rnd[Mask_ORD * (Mask_ORD+1)/2], OUTPUT: c[Mask_ORD+1])
     c = a * b
     rnd: random numbers (on_the_fly)*/
     void DOM_independent(uint8_t* input_a, uint8_t* input_b, uint8_t* rnd, uint8_t* c){
