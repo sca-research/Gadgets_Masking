@@ -39,6 +39,8 @@ void opt_refresh_mask(uint8_t* a, int Mask_order, uint8_t* rnd, uint8_t* d){
         //t_reg_rnd0[1]
         //t_reg_rnd0[2]
         t_reg_rnd0[3] ^= rnd[d_shares];
+        //t_reg_rnd0[4]
+        //t_reg_rnd0[5]
     }
 
     if (d_shares == 7) {
@@ -89,7 +91,6 @@ void opt_refresh_mask(uint8_t* a, int Mask_order, uint8_t* rnd, uint8_t* d){
         t_reg_rnd0[7] ^= rnd[d_shares+2];
         t_reg_rnd0[8] ^= rnd[d_shares+3];
         t_reg_rnd0[9] ^= rnd[d_shares+4];
-        //t_reg_rnd0[10]
     }
 
 
@@ -106,7 +107,6 @@ void opt_refresh_mask(uint8_t* a, int Mask_order, uint8_t* rnd, uint8_t* d){
         t_reg_rnd0[8]  ^= rnd[d_shares+3];
         t_reg_rnd0[9]  ^= rnd[d_shares+4];
         t_reg_rnd0[10] ^= rnd[d_shares+5];
-        //t_reg_rnd0[11]
     }
 
     if (d_shares == 12) {
@@ -123,7 +123,6 @@ void opt_refresh_mask(uint8_t* a, int Mask_order, uint8_t* rnd, uint8_t* d){
         t_reg_rnd0[9]  ^= rnd[d_shares+3];
         t_reg_rnd0[10] ^= rnd[d_shares+4];
         t_reg_rnd0[11] ^= rnd[d_shares+5] ^ rnd[d_shares+7];
-        //t_reg_rnd0[12]
     }
 
     if (12 < d_shares && d_shares < 17) {
