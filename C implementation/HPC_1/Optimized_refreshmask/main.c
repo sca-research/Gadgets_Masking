@@ -32,7 +32,7 @@ int main(void)
         Mask(mask_in, input_a);
 
         // Calling the Optimized RefreshMasks
-        opt_refresh_mask(mask_in, Mask_ORD, rnd_f, d);
+        opt_refresh_mask(mask_in, rnd_f, d);
 
 
         // Verifying the Optimized RefreshMasks
