@@ -5,12 +5,6 @@
 #include "Opt_Ref_Mask.h"
 #include "string.h" // memcpy func
 
-/* Func for computing  s^i + (s^i >> n)
- *  s^i >> n, rotates to the right the s^i vector in the way that first element goes to n+1 th element
-Using for: the input s^i is an array and array are stored in memory continuously */
-/*void  si_xor_rotated_si(int Num_shares: d_sh, int num_rotation: r, uint8_t* rnd: randomness, uint8_t* t: output);
-uint8_t* rnd has rnd_n elements, that the first (Mask_ORD+1: d_shares) elements [0: Mask_ORD(d_shares-1)] are used in s^i
- an the rest are used as r_i */
 
 void  si_xor_rotated_si(int d_sh, int r, uint8_t* rnd_vec, int ind_start, int ind_end, uint8_t* t);
 //////////////////////////////////////////////////////////////////////
@@ -19,7 +13,7 @@ void opt_refresh_mask(uint8_t* a, int Mask_order, uint8_t* rnd, uint8_t* d){
 
     static uint8_t reg_shares[Mask_ORD+1]; // Register for refreshed shares
     static uint8_t t_reg_rnd0[Mask_ORD+1]; // Register for new randomness
-    static uint8_t t_reg_rnd1[Mask_ORD+1]; // Register for new randomness
+    static uint8_t t_reg_rnd1[Mask_ORD+1]; // Register for new randomness when 13<= d_sh <= 16
 
 
     int d_shares = Mask_order +1; // Number of shares
@@ -134,7 +128,7 @@ void opt_refresh_mask(uint8_t* a, int Mask_order, uint8_t* rnd, uint8_t* d){
 
     if (12 < d_shares && d_shares < 17) {
         si_xor_rotated_si(d_shares, 1, rnd, 0, d_shares, t_reg_rnd0);
-        si_xor_rotated_si(d_shares, 3, rnd, d_shares, (2*d_shares)-1 , t_reg_rnd1);
+        si_xor_rotated_si(d_shares, 3, rnd, d_shares, (2*d_shares) , t_reg_rnd1);
         for (int i=0; i< d_shares; i++){
             t_reg_rnd0[i] ^= t_reg_rnd1[i];
         }
@@ -149,12 +143,55 @@ void opt_refresh_mask(uint8_t* a, int Mask_order, uint8_t* rnd, uint8_t* d){
 
 }
 
+
+/*
+ * d_shares = Mask_ORD+1
+ * Func for computing  s^i + (s^i >> r)
+ *  s^i >> r, rotates to the right the s^i vector in the way that first element goes to r+1 th element
+ *  Using FOR LOOP in this func: the input s^i is an array and array are stored in memory continuously
+ *  void  si_xor_rotated_si(int Num_shares: d_sh, int num_rotation: r, uint8_t* rnd: random_vector, int ind_start: index start, int ind_end: index end,uint8_t* t: output);
+ *  uint8_t* rnd has rnd_n elements, that the first d_shares elements [0: d_shares-1] are used in s^0
+ *  an the rest are used as r_i
+ *  For 13<= d_sh <= 16 : there are s^0 and s^1. rnd_vector has 2*d_shares elements, that the first d_shares elements [0: d_shares-1] are used in s^0
+ *  and the second  d_shares elements [d_shares : 2*d_shares] are used as s^1
+ *
+ *  For s^0: r = 1 ---> si_xor_rotated_si(d_shares, 1, rnd, 0, d_shares, t_reg_rnd0);
+ *  For s^1: r = 3 ---> si_xor_rotated_si(d_shares, 3, rnd, d_shares, (2*d_shares) , t_reg_rnd1);
+*/
 void  si_xor_rotated_si(int d_sh, int r, uint8_t* rnd_vec, int ind_start, int ind_end, uint8_t* t) {
     for (int j=0; j<r; j++){
-        t[j] = rnd_vec[ind_start] ^ rnd_vec[ind_end-r];
+        t[j] = rnd_vec[ind_start+j] ^ rnd_vec[ind_end - 1 -j];
     }
-    for (int i=r; i<= (d_sh-r); i++){
-        t[i] = rnd_vec[i+ind_start] ^ rnd_vec[i-r-d_sh];
+    for (int i=r; i<= (d_sh+r-1); i++){
+        t[i] = rnd_vec[i+ind_start] ^ rnd_vec[i + ind_start -r];
     }
 }
 
+
+
+
+/*
+// The number of randomness in Optimized RefreshMask
+int rnd_number(int Mask_order){
+    int d = Mask_order+1;
+
+    if (d <= 3){
+        return (d-1);
+    }
+
+    if (d <= 5){
+        return d;
+    }
+
+    if (d <=11){
+        return (2*d -5);
+    }
+
+    if (d ==12){
+        return (d+8);
+    }
+
+    if (d <=16){
+        return (2*d);
+    }
+}*/
