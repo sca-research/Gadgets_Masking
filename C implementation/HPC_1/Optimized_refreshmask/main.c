@@ -1,4 +1,4 @@
-/*Here the correctness of the gadget is checked with random inputs (a and b).*/
+/*Here the correctness of the Optimized RefreshMask is checked with random inputs).*/
 #include "Opt_Ref_Mask.h"
 
 void Mask(uint8_t* y, uint8_t x);
@@ -28,13 +28,6 @@ int main(void)
             rnd_f[k] = rand() % 256;
             //printf( "  %02x  ", rnd_f[k]);
         }
-
-       /* kOpt_Ref_Mask two vectors of randomness, one for r and one sor s0 (s1)
-        The length of vectors:
-        s0: d (Mask_ORD +1) elements (randomness)
-        r : (rnd_n - d) elements (randomness)
-*/
-
 
         Mask(mask_in, input_a);
 
