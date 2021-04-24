@@ -65,8 +65,8 @@ static uint8_t b[Mask_ORD+1];
             for (j = 0; j < Mask_ORD + 1; j++) {
                 if (i != j) {
                     s[i][j] = b[j] ^ r[i][j];
-                    //r[i][j] ^ (a[i] * r[i][j]) = r[i][j] * (a[i] ^ 1) = r[i][j] *(a[i] ^ 0x01) = r[i][j]
-                    p0[i][j] = gfMul((a[i] ^ 0x01) , r[i][j]);
+                    //r[i][j] ^ (a[i] * r[i][j]) = r[i][j] * (a[i] ^ 1) = r[i][j] *(a[i] ^ 0xff) = r[i][j]
+                    p0[i][j] = gfMul((a[i] ^ 0xff) , r[i][j]);
                     p1[i][j] = gfMul(a[i], s[i][j]);
                     z[i][j] = p0[i][j] ^ p1[i][j];
 
