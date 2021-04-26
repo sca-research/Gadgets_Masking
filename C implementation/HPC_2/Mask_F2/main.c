@@ -2,9 +2,9 @@
 #include <stdint.h>
 #include "stdlib.h" //srand()
 #include "time.h"
-#define Mask_ORD 7
+#include "mask_f2.h"
 
-uint32_t Mask(int input);
+
 
 // Testing Mask func for different inputs
 int main()
