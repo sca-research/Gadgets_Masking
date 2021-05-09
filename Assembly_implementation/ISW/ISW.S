@@ -35,7 +35,7 @@ loop1_i_rnd:
     ldr  r5, =rand  
     adds r4, #1, #share_n 
     mul  r4, r12        @ r4 = r12 * r4 = i*(share_n +1)
-	movs r6, #0
+    movs r6, #0
     strb r6, [r5, r4]   @ r[i][i]=0
 
 
@@ -61,7 +61,7 @@ loop2_j_rnd:
     @@@@ Second: Making the elements of array rand (r[i][j], and r[j][i])
     @ r4 is the index
     ldr  r5, =rand  
-   	ldrb r6, [r2, r4]    @@@@ acces to rnd[index] @@@@  rnd is in r2 which is the input of Seminal_ISW
+    ldrb r6, [r2, r4]    @@@@ acces to rnd[index] @@@@  rnd is in r2 which is the input of Seminal_ISW
 
     @@@@ r[i][j]: finding the right memory location 
     @@@@ r4 = (share_n*i + j): next memory location   
@@ -70,7 +70,7 @@ loop2_j_rnd:
     adds r4, r11        @ r4 = (share_n*i + j)
 
     @@@@ store rnd[inedx] into array rand in the location (share_n*i + j): r[i][j]
-	strb r6, [r5, r4]
+    strb r6, [r5, r4]
 
     @@@@ r[j][i]: finding the right memory location
     @@@@ r4 = (share_n*j + i): next memory location   
@@ -81,7 +81,7 @@ loop2_j_rnd:
 
     ldrb r0, [r0, r12]     @ a[i]: input_a is the first input of Seminal_ISW and goes to r0
     ldrb r1, [r1, r11]     @ b[j]: input_b is the second input of Seminal_ISW and goes to r1
-	bl   gfmul 	           @ the output is input_a[i]*input_b[j] and is in r0
+    bl   gfmul 	           @ the output is input_a[i]*input_b[j] and is in r0
     eors r6, r0            @ r[i][j] ^ (input_a[i]*input_b[i])
     
     ldrb r0, [r0, r11]     @ a[j]: input_a is the first input of Seminal_ISW and goes to r0
@@ -90,23 +90,23 @@ loop2_j_rnd:
     eors r6, r0            @ r6 = r[i][j] - (r[i][j] ^ (input_a[i]*input_b[i]))^ gfMul(input_a[j], input_b[i]);
 
     @@@@ store rnd[inedx] into array rand in the location (share_n*i + j): r[j][i]
-	strb r6, [r5, r4]
+    strb r6, [r5, r4]
 
 
 @@@@ Updating loop counter j @@@@ j < Mask_ord+1; j++
-	add r11, #1  
-	cmp	r11, #share_n
+	adds r11, #1  
+	cmp  r11, #share_n
     ble loop2_j_rnd
 
 @@@@ Updating loop counter (i) @@@@ i < Mask_ord+1; i++
-	add  r12, #1  
-	cmp	 r12, #share_n
+	adds r12, #1  
+	cmp  r12, #share_n
     ble  loop1_i_rnd
 
 
 
 for_loop_i:
-	add  r12, #1
+	adds  r12, #1
 	cmp	 r12, #share_n
 	bne	
     bx	  lr
