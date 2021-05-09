@@ -9,15 +9,15 @@
 .extern rnd_n       @@@@ The number of Randomness which is the input of the Seminal_ISW multiplication
 .extern table       @@@@ Table is used for gfmult
 
-@@@@ defining an array for randomnesses with ROW ORDER method: r[share_n][share_n]
+@@@@ defining an array for randomnesses with ROW ORDER method(in memory): r[share_n][share_n]
 @@@@ each row of the array starts from a memory location  like: mem_addr + share_n  
 .balign 1 
-rand: .skip rnd_n
+rand: .skip share_n * share_n
 
 
 .section .text
 
-@@@@ void Seminal_ISW(uint8_t* input_a, uint8_t* input_b,uint8_t* rnd, uint8_t* c);
+@@@@ void Seminal_ISW(uint8_t* input_a, uint8_t* input_b, uint8_t* rnd, uint8_t* c);
 .global Seminal_ISW
 .func Seminal_ISW
 
@@ -57,14 +57,13 @@ for_loop2_j_rnd:
     sub  r4, r12    @ (i * share_n) - (i * (i + 1) / 2) + j -i
     subs r4, #1     @@@@ r4 = index
 
-
     @@@@ Second: Making the elements of array rand (r[i][j], and r[j][i])
     @ r4 is the index
     ldr  r5, =rand  
     ldrb r6, [r2, r4]    @@@@ acces to rnd[index] @@@@  rnd is in r2 which is the input of Seminal_ISW
 
     @@@@ r[i][j]: finding the right memory location 
-    @@@@ r4 = (share_n*i + j): next memory location   
+    @@@@ r4 = (share_n*i + j): memory location   
     movs r4, #share_n   @ r4 = share_n
     mul  r4, r12        @ r4 = share_n * i
     adds r4, r11        @ r4 = (share_n*i + j)
@@ -73,7 +72,7 @@ for_loop2_j_rnd:
     strb r6, [r5, r4]
 
     @@@@ r[j][i]: finding the right memory location
-    @@@@ r4 = (share_n*j + i): next memory location   
+    @@@@ r4 = (share_n*j + i): memory location   
     movs r4, #share_n   @ r4 = share_n
     mul  r4, r11        @ r4 = share_n * j
     adds r4, r12        @ r4 = (share_n*j + i)
