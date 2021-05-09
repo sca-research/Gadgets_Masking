@@ -4,9 +4,10 @@
 
 .section .data
 
-.extern Mask_ORD
-.extern rnd_n
-.extern table @@@@ Table is used for gfmult
+.extern Mask_ORD    @@@@ share_n = Mask_ORD + 1 
+.extern share_n
+.extern rnd_n       @@@@ The number of Randomness which is the input of the Seminal_ISW multiplication
+.extern table       @@@@ Table is used for gfmult
 
 @@@@ defining an array for randomnesses with ROW ORDER method: r[share_n][share_n]
 @@@@ each row of the array starts from a memory location  like: mem_addr + share_n  
@@ -24,67 +25,83 @@ Seminal_ISW:
 	push {lr}
 	push {r0-r7,r11, r12}  @ input_a:r0, input_b:r1, rnd:r2, c:r3, r12: loop counter i, r11: loop counter j
 	
+
+@@@@@ Making the array rand @@@@@@@@@@@@@@@@@
+
     mov  r12, #0  @ Loop counter i //not MOVS, r12 is Hi reg
-loop1_i:
-	ldrb r4, [r0, r12]     @ input_a is the first  input and goes to r0
-	ldrb r5, [r1, r12]     @ input_b is the second input and goes to r1
-	and	 r6, r4, r5 	   @ input_a[i]*input_b[i]
-	strb r6, [r3, r12]     @ c=ab goes to r3
-	
-
-
-@@@@ Updating loop counter (i) @@@@ i < Mask_ord+1; i++
-	add r12, #1  
-	cmp	r12, #share_n
-    ble loop1_i
-
-
-    mov r11, #0
-loop2_j:
-    add  r11, r12, #1 @ Loop counter j
-
-    @@@@ Computing int index = (i * share_n) - (i * (i + 1) / 2) + j - i - 1;
-    mul  r4, r12 @r4 = r12 * r4 = i*share_n 
-
-    mov  r5, r12 @r5 = i
-    adds r5, #1 @r5 = i+1
-    mul  r5, r12 @r5 = i *(i+1)
-    lsrs r5, #1 @r5 = i*(i+1)/2
-    subs r4,r5
-    add  r4, r11
-    sub  r4, r12
-    subs r4, #1   @@@@ r4 = index
-
-
-
-    @@@@ Making the array rand
+loop1_i_rnd:
+@@@@ r[i][i]=0
+@@@@ First: Computing the location of [i][j] in the memory row = (i * (share_n+1)) 
     ldr  r5, =rand  
-   	ldrb r6, [r2, r4]    @@@@ acces to rnd[index] @@@@  rnd:r2
+    adds r4, #1, #share_n 
+    mul  r4, r12        @ r4 = r12 * r4 = i*(share_n +1)
+	movs r6, #0
+    strb r6, [r5, r4]   @ r[i][i]=0
 
-    @@@@ r[i][j]
-    @@@@ r4 + (share_n*i + j): next memory location   
-    mul  r4, r12, #share_n
-    add  r4, r11    
 
-    @@@@ store rnd[inedx] into array rand : r[i][j]
+    mov  r11, #0  @ Loop counter j //not MOVS, r11 is Hi reg
+loop2_j_rnd:
+    add  r11, r12, #1 @ Loop counter j: i+1
+
+    @@@@ First: Computing int index = (i * share_n) - (i * (i + 1) / 2) + j - i - 1;
+    @@@@ For making the elements of array rand (r[i][j], and r[j][i])
+    movs r4, #share_n 
+    mul  r4, r12    @ r4 = r12 * r4 = i*share_n 
+
+    mov  r5, r12    @ r5 = i
+    adds r5, #1     @ r5 = i+1
+    mul  r5, r12    @ r5 = i *(i+1)
+    lsrs r5, #1     @ r5 = i*(i+1)/2
+    subs r4, r5     @ (i * share_n) - (i * (i + 1) / 2)
+    adds r4, r11    @ (i * share_n) - (i * (i + 1) / 2) + j
+    sub  r4, r12    @ (i * share_n) - (i * (i + 1) / 2) + j -i
+    subs r4, #1     @@@@ r4 = index
+
+
+    @@@@ Second: Making the elements of array rand (r[i][j], and r[j][i])
+    @ r4 is the index
+    ldr  r5, =rand  
+   	ldrb r6, [r2, r4]    @@@@ acces to rnd[index] @@@@  rnd is in r2 which is the input of Seminal_ISW
+
+    @@@@ r[i][j]: finding the right memory location 
+    @@@@ r4 = (share_n*i + j): next memory location   
+    movs r4, #share_n   @ r4 = share_n
+    mul  r4, r12        @ r4 = share_n * i
+    adds r4, r11        @ r4 = (share_n*i + j)
+
+    @@@@ store rnd[inedx] into array rand in the location (share_n*i + j): r[i][j]
 	strb r6, [r5, r4]
 
-    @@@@ r[j][i]
-    @@@@ r4 + (share_n*j + i): next memory location   
-    mul  r4, r11, #share_n
-    add  r4, r12 
+    @@@@ r[j][i]: finding the right memory location
+    @@@@ r4 = (share_n*j + i): next memory location   
+    movs r4, #share_n   @ r4 = share_n
+    mul  r4, r11        @ r4 = share_n * j
+    adds r4, r12        @ r4 = (share_n*j + i)
 
-    @@@@ store rnd[inedx] into array rand : r[j][i]
+
+    ldrb r0, [r0, r12]     @ a[i]: input_a is the first input of Seminal_ISW and goes to r0
+    ldrb r1, [r1, r11]     @ b[j]: input_b is the second input of Seminal_ISW and goes to r1
+	bl   gfmul 	           @ the output is input_a[i]*input_b[j] and is in r0
+    eors r6, r0            @ r[i][j] ^ (input_a[i]*input_b[i])
+    
+    ldrb r0, [r0, r11]     @ a[j]: input_a is the first input of Seminal_ISW and goes to r0
+    ldrb r1, [r1, r12]     @ b[i]: input_b is the second input of Seminal_ISW and goes to r1
+    bl   gfmul 	           @ the output is input_a[j]*input_b[i] and is in r0	
+    eors r6, r0            @ r6 = r[i][j] - (r[i][j] ^ (input_a[i]*input_b[i]))^ gfMul(input_a[j], input_b[i]);
+
+    @@@@ store rnd[inedx] into array rand in the location (share_n*i + j): r[j][i]
 	strb r6, [r5, r4]
-
-
 
 
 @@@@ Updating loop counter j @@@@ j < Mask_ord+1; j++
 	add r11, #1  
 	cmp	r11, #share_n
-    ble loop1_j
+    ble loop2_j_rnd
 
+@@@@ Updating loop counter (i) @@@@ i < Mask_ord+1; i++
+	add  r12, #1  
+	cmp	 r12, #share_n
+    ble  loop1_i_rnd
 
 
 
