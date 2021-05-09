@@ -29,7 +29,7 @@ Seminal_ISW:
 @@@@@ Making the array rand @@@@@@@@@@@@@@@@@
 
     mov  r12, #0  @ Loop counter i //not MOVS, r12 is Hi reg
-loop1_i_rnd:
+for_loop1_i_rnd:
 @@@@ r[i][i]=0
 @@@@ First: Computing the location of [i][i] in the memory row = (i * (share_n+1)) 
     ldr  r5, =rand  
@@ -40,7 +40,7 @@ loop1_i_rnd:
 
 
     mov  r11, #0  @ Loop counter j //not MOVS, r11 is Hi reg
-loop2_j_rnd:
+for_loop2_j_rnd:
     add  r11, r12, #1 @ Loop counter j: i+1
 
     @@@@ First: Computing int index = (i * share_n) - (i * (i + 1) / 2) + j - i - 1;
@@ -96,20 +96,58 @@ loop2_j_rnd:
 @@@@ Updating loop counter j @@@@ j < Mask_ord+1; j++
 	adds r11, #1  
 	cmp  r11, #share_n
-    ble loop2_j_rnd
+    ble for_loop2_j_rnd
 
 @@@@ Updating loop counter (i) @@@@ i < Mask_ord+1; i++
 	adds r12, #1  
 	cmp  r12, #share_n
-    ble  loop1_i_rnd
+    ble  for_loop1_i_rnd
 
 
 
-for_loop_i:
-	adds  r12, #1
-	cmp	 r12, #share_n
-	bne	
-    bx	  lr
+    mov  r12, #0  @ Loop counter i //not MOVS, r12 is Hi reg
+for_loop3_i: 
+
+@@@@ First: Computing  c[i]= gfMul(input_a[i], input_b[i]);  c: r3
+    ldrb r0, [r0, r12]     @ a[i]: input_a is the first input of Seminal_ISW and goes to r0
+    ldrb r1, [r1, r12]     @ b[j]: input_b is the second input of Seminal_ISW and goes to r1
+    bl   gfmul 	           @ the output is input_a[i]*input_b[j] and is in r0
+    strb r0, [r3, r12]    
+
+
+    mov  r11, #0  @ Loop counter j //not MOVS, r11 is Hi reg
+for_loop4_j:
+    add  r11, #1 @ Loop counter j++
+    cmp  r11, r12
+    bne  c_xor_r
+
+
+@@@@ Updating loop counter j @@@@ j < Mask_ord+1; j++
+	adds r11, #1  
+	cmp  r11, #share_n
+    ble for_loop4_j
+
+@@@@ Updating loop counter (i) @@@@ i < Mask_ord+1; i++
+	adds r12, #1  
+	cmp  r12, #share_n
+    ble  for_loop3_i
+
+c_xor_r:
+    @@@@ Finding the memory location of r[i][j] (rand array) in the memory low: (i * sahre_n)+j
+    ldr  r5, =rand  
+
+    movs r4, #share_n
+    mul  r4, r12    @ i * sahre_n
+    adds r4, r11    @ (i * sahre_n)+j
+
+    @@@@  c[i] = c[i] ^ r[i][j];
+    ldrb r6, [r5, r4]   @ r[i][j]
+    ldrb r7, [r3, r12]  @ c[i]
+    eors r6, r7
+    strb r6, [r3, r12]
+    bx   lr
+
+
     
     
     pop	 {r0-r7,r11, r12}
@@ -158,7 +196,7 @@ gfmul:
 
     zero_out:
         mov  r0, #0
-        .end
+        bx   lr
 
 
 	pop	{r0,r5}
