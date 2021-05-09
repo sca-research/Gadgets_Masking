@@ -31,7 +31,7 @@ Seminal_ISW:
     mov  r12, #0  @ Loop counter i //not MOVS, r12 is Hi reg
 loop1_i_rnd:
 @@@@ r[i][i]=0
-@@@@ First: Computing the location of [i][j] in the memory row = (i * (share_n+1)) 
+@@@@ First: Computing the location of [i][i] in the memory row = (i * (share_n+1)) 
     ldr  r5, =rand  
     adds r4, #1, #share_n 
     mul  r4, r12        @ r4 = r12 * r4 = i*(share_n +1)
