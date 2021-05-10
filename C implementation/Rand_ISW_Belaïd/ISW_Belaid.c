@@ -9,12 +9,28 @@ Paper: Randomness Complexity of Private Circuits for Multiplication, Algorithm 3
 static uint8_t a[Mask_ORD+1];
 static uint8_t b[Mask_ORD+1];
 
-    uint8_t gfMul(uint8_t a, uint8_t b)
-    {
-        int s = 0;
-        s = table[a] + table[b];
-        int q;
-        /* Get the antilog */
+uint8_t gfMul(uint8_t a, uint8_t b)
+{
+    int s = 0;
+    s = table[a] + table[b];
+    /* Get the antilog */
+    s = table[s+256];
+/*
+    Checking a=0 or b=0, without conditional branch: if (a==0 or b==0){return 0;} else{return s;}
+     Countermeasure for Power analysis attacks
+*/
+    uint8_t tmp = 0;
+    tmp = b & (-a >> 8);
+    s = s & (-tmp >> 8);
+    return s;
+}
+
+/* uint8_t gfMul(uint8_t a, uint8_t b)
+   {
+       int s = 0;
+       s = table[a] + table[b];
+       int q;
+       *//* Get the antilog *//*
         s = table[s+256];
         uint8_t z = 0;
         q = s;
@@ -29,7 +45,12 @@ static uint8_t b[Mask_ORD+1];
             q = z;
         }
         return s;
-    }
+    }*/
+
+
+
+
+
 
 
     void Mask(uint8_t y[Mask_ORD+1], uint8_t* x){
