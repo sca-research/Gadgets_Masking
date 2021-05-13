@@ -17,15 +17,6 @@
                                               0   r0   r1
             input: (r0,r1,r2) ---> output:    r0   0   r2
                                               r1  r2    0
-    Also, regarding the HPC_2 algorithm:
-    u[i][j] = ~a[i] * Reg[r[i][j]];
-    v[i][j] = b[j] + r[i][j];
-    The randomness is used in two ways:
-    1) r[i][j]
-    2) Reg[r[i][j]]
-    From 1-dimension vector rnd, we have to produce:
-     r[Mask_ORD+1][Mask_ORD+1] and Reg[r[Mask_ORD+1][Mask_ORD+1]]
-    Where Reg is using a register
     */
 
         int i, j;
