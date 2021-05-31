@@ -31,6 +31,8 @@ Then:
 
 `$ export TARGET="${SCALE_HW}/target/lpc1313fbd48"`
 
+`$  cd ${TARGET}`
+
 `$ make --no-builtin-rules clean all`
 
 `$  cd ${SCALE_HW}/ISW_1`
