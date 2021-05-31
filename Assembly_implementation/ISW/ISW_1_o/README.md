@@ -51,4 +51,4 @@ Then, on the [SCALE board](https://github.com/danpage/scale):
 
 5) Release the (right-hand) GPI switch,
 
-Finally, Running the **test.py**.
+Finally, running the **test.py**.
