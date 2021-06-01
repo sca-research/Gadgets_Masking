@@ -7,7 +7,7 @@ isw_1
 ISW_1/main.c is for testing the isw_1 function.
 For more clarification, please see [C implementation of ISW](https://github.com/sca-research/Gadgets_Masking/tree/main/C%20implementation/ISW)
 
-**test.py**: Transfering data through UART to/from the [SCALE board](https://github.com/danpage/scale), in order to check the correctness of the implementation.
+**test.py**: Transfering data through UART to/from the [SCALE board](https://github.com/danpage/scale.
 
 
 Downloading [SCALE](https://github.com/danpage/scale).
