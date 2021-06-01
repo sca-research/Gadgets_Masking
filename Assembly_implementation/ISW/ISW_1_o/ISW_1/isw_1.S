@@ -13,7 +13,7 @@
 .func Isw_1
 Isw_1:
   push  {lr}
-  push  {r0-r9}
+  push  {r4-r9}
 
 @@@@@ r0 = &a, r1 = &b, r2 = &r, r3 = &c
 @@@@@ Saving r3 (the address of the output)
@@ -65,7 +65,7 @@ Isw_1:
 
 
 
-  pop  {r0-r9}
+  pop  {r4-r9}
   pop  {pc}
   .endfunc 
 
