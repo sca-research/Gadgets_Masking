@@ -229,7 +229,7 @@ Isw_3:
   ldrb r4, [r3, #3]   @ r4 = a3 * b3
   eors r2, r4         @c3 = [((a0 * b3) ^ rnd2) ^ (a3 * b0)] ^ [((a1 * b3) ^ rnd4) ^ (a3 * b1)] ^ [((a2 * b3) ^ rnd5) ^ (a3 * b2)] ^ (a3 * b3)
 
-  strb r2, [r3, #3]    @ Storing c2 in c2
+  strb r2, [r3, #3]    @ Storing c3 in c3
   
 
 
