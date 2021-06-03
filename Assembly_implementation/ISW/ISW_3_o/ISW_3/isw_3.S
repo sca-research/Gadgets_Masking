@@ -78,7 +78,7 @@ Isw_3:
 
 @@@@ c0 = (a0 * b0) ^ rnd0 ^ rnd1 ^ rnd2
 @@@@ From previous step:r3 = &c, r4 = a0, r5 = b0, r6 = a1, r7 = b1, r8 = &c, r9 = &a, r10 = &b, r11 = &rnd
-@@@@ r4-r7 are not used to avoide using more LDRB instruction, so r0, r1, r2 can be used
+@@@@ r4-r7 are not used to avoid using more LDRB instruction, so r0, r1, r2 can be used
   ldrb r0, [r3, #0]   @ r0 = a0 * b0
   mov  r2, r11        @ r2 = &rnd
   ldrb r1, [r2, #0]   @ r1 = rnd0
@@ -97,7 +97,7 @@ Isw_3:
 
 @@@@ c1 = [((a0 * b1) ^ rnd0) ^ (a1 * b0)] ^ (a1 * b1) ^ rnd3 ^ rnd4
 @@@@ From previous step: r2 = &rnd, r3 = &c, r4 = a0, r5 = b0, r6 = a1, r7 = b1, r8 = &c, r9 = &a, r10 = &b, r11 = rnd0
-@@@@ r4-r7 are not used to avoide using more LDRB instruction, so r0, r1 can be used
+@@@@ r4-r7 are not used to avoid using more LDRB instruction, so r0, r1 can be used
   mov  r0, r4         @ r0 = a0
   mov  r1, r7         @ r1 = b1
   bl   gfmul          @ r0 = a0 * b1
@@ -127,10 +127,10 @@ Isw_3:
 
 @@@@@ c2 = [((a0 * b2) ^ rnd1) ^ (a2 * b0)] ^ [((a1 * b2) ^ rnd3) ^ (a2 * b1)] ^ (a2 * b2) ^ rnd5
 @@@@ From previous step: r2 = &rnd, r3 = &c, r4 = a0, r5 = b0, r6 = a1, r7 = b1, r8 = &c, r9 = &a, r10 = &b, r11 = rnd3
-@@@@ r4-r7 are not used to avoide using more LDRB instruction, so r0, r1 can be used
+@@@@ r4-r7 are not used to avoid using more LDRB instruction, so r0, r1 can be used
   mov  r0, r4          @ r0 = a0
   mov  r1, r10         @ r1 = &b
-  ldrb r3, [r1, #2]    @ r3 = b2 @ using r3 to avoide loading b2 again
+  ldrb r3, [r1, #2]    @ r3 = b2 @ using r3 to avoid loading b2 again
   mov  r1, r3          @ r1 = b2
   bl   gfmul           @ r0 = a0 * b2
 
@@ -139,7 +139,7 @@ Isw_3:
 
   mov  r1, r5          @ r1 = b0
   mov  r0, r9          @ r0 = &a  
-  ldrb r5, [r0, #2]    @ r5 = a2 @ using r5 to avoide loading a2 again
+  ldrb r5, [r0, #2]    @ r5 = a2 @ using r5 to avoid loading a2 again
   mov  r0, r5          @ r0 = a2
   bl   gfmul           @ r0 = a2 * b0
   eors r4, r0          @ r4 = [((a0 * b2) ^ rnd1) ^ (a2 * b0)]
@@ -174,11 +174,11 @@ Isw_3:
   
 @@@@@ c3 = [((a0 * b3) ^ rnd2) ^ (a3 * b0)] ^ [((a1 * b3) ^ rnd4) ^ (a3 * b1)] ^ [((a2 * b3) ^ rnd5) ^ (a3 * b2)] ^ (a3 * b3)
 @@@@ From previous step: r2 = &rnd, r3 = , r4 = rnd5, r5 = a2, r6 = a1, r7 = b1, r8 = &c, r9 = &a, r10 = &b, r11 = 
-@@@@ r4-r7 are not used to avoide using more LDRB instruction, so r0, r1, r3 can be used
+@@@@ r4-r7 are not used to avoid using more LDRB instruction, so r0, r1, r3 can be used
   mov  r0, r9          @ r0 = &a
   mov  r1, r10         @ r1 = &b
   ldrb r0, [r0, #0]    @ r0 = a0
-  ldrb r1, [r1, #3]    @ r1 = b3 @ using r3 to avoide  loading b3 again
+  ldrb r1, [r1, #3]    @ r1 = b3 @ using r3 to avoid  loading b3 again
   mov  r11, r1         @ r11 = b3 saving b3
   bl   gfmul           @ r0 = a0 * b3
 
@@ -187,7 +187,7 @@ Isw_3:
 
   mov  r0, r9          @ r0 = &a
   mov  r1, r10         @ r1 = &b
-  ldrb r7, [r0, #3]    @ r7 = a3   @ using r7 to avoide  loading b3 again
+  ldrb r7, [r0, #3]    @ r7 = a3   @ using r7 to avoid  loading b3 again
   mov  r0, r7          @ r0 = a3
   ldrb r1, [r1, #0]    @ r1 = b0
   bl   gfmul           @ r0 = a3 * b0
