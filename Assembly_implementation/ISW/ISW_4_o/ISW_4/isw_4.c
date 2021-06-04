@@ -5,7 +5,7 @@
 void Mask(uint8_t x, uint8_t* rnd, uint8_t* y);
 uint8_t gmul(uint8_t a, uint8_t b);
 
-/*The number of shares: Mask_order+1: 3+1=4*/
+/*The number of shares: Mask_order+1: 4+1=5*/
 int  share_n = 5;
 
 /*The number of randomness for ISW: Mask_order*(Mask_order + 1)/2: 4*(4+1)/2=10
