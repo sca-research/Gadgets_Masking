@@ -6,7 +6,7 @@
   .extern table       @@@@ table is used for gfmult
   
 @@@@ extern void Isw_2(uint8_t* inputa: addres: r0, uint8_t* inputb: address: r1, uint8_t* rnd: address: r2, uint8_t* output: address: r3);
-@inputa: a0, a1, a2, inputb: b0, b1, b2, rnd: r0, r1, r2, output: c: c0, c1, c2
+@inputa: a0, a1, a2, inputb: b0, b1, b2, rnd: rnd0, rnd1, rnd2, output: c: c0, c1, c2
 
 
 .global Isw_2
@@ -34,7 +34,7 @@ Isw_2:
   ldrb r4, [r0, #0] @r4 = a0; r0 = &a, r1 = &b, r2 = &rnd, r3 = &c
   ldrb r5, [r0, #1] @r5 = a1; r0 = &a, r1 = &b, r2 = &rnd, r3 = &c
   ldrb r6, [r1, #0] @r6 = b0; r0 = &a, r1 = &b, r2 = &rnd, r3 = &c
-  ldrb r7, [r1, #1] @r7 = b1; r0 = &a, r1 = &b, r2 =  &rnd, r3 = &c
+  ldrb r7, [r1, #1] @r7 = b1; r0 = &a, r1 = &b, r2 = &rnd, r3 = &c
 
 @@@@ Reducing the use of LDRB instruction: ldrb rx, [r0, #0] @ rx = a0; --> mov rx, r11 
   mov  r11, r4   @ r11 = b1
