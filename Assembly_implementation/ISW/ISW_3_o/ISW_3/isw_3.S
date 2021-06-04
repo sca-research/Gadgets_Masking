@@ -1,5 +1,4 @@
-
-  .syntax unified
+ .syntax unified
   .text
   .thumb
   
@@ -34,8 +33,8 @@ Isw_3:
 @@@@@@@@@@ Computing: ai * bi
 @@@@@@ In gfmul, r0 and r1 are the arguments
 @@@@ a0 * b0
-  ldrb r4, [r0, #0] @ r4 = a0;  r0 = &a, r1 = &b, r2 = &rnd, r3 = &c  @ using r4 to avoid loading a0 again
-  ldrb r5, [r1, #0] @ r5 = b0;  r0 = &a, r1 = &b, r2 = &rnd, r3 = &c  @ using r5 to avoid loading a1 again
+  ldrb r4, [r0, #0] @ r4 = a0;  r0 = &a, r1 = &b, r2 = &rnd, r3 = &c
+  ldrb r5, [r1, #0] @ r5 = b0;  r0 = &a, r1 = &b, r2 = &rnd, r3 = &c
   mov  r0, r4       @ r0 = a0; 
   mov  r1, r5       @ r1 = b0; 
   bl   gfmul        @ r0 = a0 * b0
@@ -44,8 +43,8 @@ Isw_3:
 @@@@ a1 * b1
   mov  r0, r9       @ r0 = &a
   mov  r1, r10      @ r1 = &b
-  ldrb r6, [r0, #1] @ r6 = a1;  r0 = &a, r1 = &b, r2 = &rnd, r3 = &c   @ using r6 to avoid loading a1 again
-  ldrb r7, [r1, #1] @ r7 = b1;  r0 = &a, r1 = &b, r2 = &rnd, r3 = &c   @ using r7 to avoid loading b1 again
+  ldrb r6, [r0, #1] @ r6 = a1;  r0 = &a, r1 = &b, r2 = &rnd, r3 = &c
+  ldrb r7, [r1, #1] @ r7 = b1;  r0 = &a, r1 = &b, r2 = &rnd, r3 = &c
   mov  r0, r6       @ r0 = a1
   mov  r1, r7       @ r1 = b1
   bl   gfmul        @ r0 = a1 * b1
@@ -54,16 +53,16 @@ Isw_3:
 @@@@ a2 * b2
   mov  r0, r9       @ r0 = &a
   mov  r1, r10      @ r1 = &b
-  ldrb r0, [r0, #2] @ r2 = a2;  r0 = &a, r1 = &b 
-  ldrb r1, [r1, #2] @ r3 = b2;  r0 = &a, r1 = &b
+  ldrb r0, [r0, #2] @ r0 = a2;  r0 = &a, r1 = &b 
+  ldrb r1, [r1, #2] @ r1 = b2;  r0 = &a, r1 = &b
   bl   gfmul        @ r0 = a2 * b2
   strb r0, [r3, #2] @ Storing (a2 * b2) in c2
 
 @@@@ a3 * b3
   mov  r0, r9       @ r0 = &a
   mov  r1, r10      @ r1 = &b
-  ldrb r0, [r0, #3] @ r2 = a3;  r0 = &a, r1 = &b 
-  ldrb r1, [r1, #3] @ r3 = b3;  r0 = &a, r1 = &b 
+  ldrb r0, [r0, #3] @ r0 = a3;  r0 = &a, r1 = &b 
+  ldrb r1, [r1, #3] @ r1 = b3;  r0 = &a, r1 = &b 
   bl   gfmul        @ r0 = a3 * b3
   strb r0, [r3, #3] @ Storing (a3 * b3) in c3
 
@@ -71,10 +70,9 @@ Isw_3:
 @@@@@@@@@@ Computing: ci
 
 @@@@ c0 = (a0 * b0) ^ rnd0 ^ rnd1 ^ rnd2
-@@@@ From previous step:r3 = &c, r4 = a0, r5 = b0, r6 = a1, r7 = b1, r8 = &c, r9 = &a, r10 = &b, r11 = &rnd
-@@@@ r4-r7 are not used to avoid using more LDRB instruction, so r0, r1, r2 can be used
+@@@@ From previous step:r2 = &rnd, r3 = &c, r4 = a0, r5 = b0, r6 = a1, r7 = b1, r8 = &c, r9 = &a, r10 = &b, r11 = &rnd
+@@@@ r4-r7 are not used to avoid using more LDRB instruction, so r0, r1 can be used
   ldrb r0, [r3, #0]   @ r0 = a0 * b0
-  mov  r2, r11        @ r2 = &rnd
   ldrb r1, [r2, #0]   @ r1 = rnd0
   mov  r11, r1        @ saving rnd0 for computing c1
   eors r0, r1         @ r0 = (a0 * b0) ^ rnd0 
