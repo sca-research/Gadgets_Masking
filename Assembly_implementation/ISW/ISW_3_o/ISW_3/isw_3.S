@@ -195,7 +195,7 @@ Isw_3:
 
 
   mov  r1, r10         @ r1 = &b
-  ldrb r1, [r1, #1]    @ r6 = b1
+  ldrb r1, [r1, #1]    @ r1 = b1
   mov  r0, r7          @ r0 = a3
   bl   gfmul           @ r0 = a3 * b1
 
