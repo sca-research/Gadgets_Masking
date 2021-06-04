@@ -34,8 +34,8 @@ Isw_3:
 @@@@@@@@@@ Computing: ai * bi
 @@@@@@ In gfmul, r0 and r1 are the arguments
 @@@@ a0 * b0
-  ldrb r4, [r0, #0] @ r4 = a0;  r0 = &a, r1 = &b, r2 = &rnd, r3 = &c
-  ldrb r5, [r1, #0] @ r5 = b0;  r0 = &a, r1 = &b, r2 = &rnd, r3 = &c
+  ldrb r4, [r0, #0] @ r4 = a0;  r0 = &a, r1 = &b, r2 = &rnd, r3 = &c  @ using r4 to avoid loading a0 again
+  ldrb r5, [r1, #0] @ r5 = b0;  r0 = &a, r1 = &b, r2 = &rnd, r3 = &c  @ using r5 to avoid loading a1 again
   mov  r0, r4       @ r0 = a0; 
   mov  r1, r5       @ r1 = b0; 
   bl   gfmul        @ r0 = a0 * b0
@@ -44,8 +44,8 @@ Isw_3:
 @@@@ a1 * b1
   mov  r0, r9       @ r0 = &a
   mov  r1, r10      @ r1 = &b
-  ldrb r6, [r0, #1] @ r6 = a1;  r0 = &a, r1 = &b, r2 = &rnd, r3 = &c
-  ldrb r7, [r1, #1] @ r7 = b1;  r0 = &a, r1 = &b, r2 = &rnd, r3 = &c
+  ldrb r6, [r0, #1] @ r6 = a1;  r0 = &a, r1 = &b, r2 = &rnd, r3 = &c   @ using r6 to avoid loading a1 again
+  ldrb r7, [r1, #1] @ r7 = b1;  r0 = &a, r1 = &b, r2 = &rnd, r3 = &c   @ using r7 to avoid loading b1 again
   mov  r0, r6       @ r0 = a1
   mov  r1, r7       @ r1 = b1
   bl   gfmul        @ r0 = a1 * b1
