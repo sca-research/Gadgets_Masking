@@ -25,16 +25,16 @@ Isw_2:
 @@@@@ Saving r0 (the address of the input a)
   mov  r9, r0     @ r9 = &a
 
-@@@@@ Saving r1 (the address of the input a)
+@@@@@ Saving r1 (the address of the input b)
   mov  r10, r1    @ r10 = &b
 
 
 
 @@@@@ Loading arguments @@@@@@@@@@@@
-  ldrb r4, [r0, #0] @r4 = a0; r0 = &a, r1 = &b, r2 =  r, r3 = &c
-  ldrb r5, [r0, #1] @r5 = a1; r0 = &a, r1 = &b, r2 =  r, r3 = &c
-  ldrb r6, [r1, #0] @r6 = b0; r0 = &a, r1 = &b, r2 =  r, r3 = &c
-  ldrb r7, [r1, #1] @r7 = b1; r0 = &a, r1 = &b, r2 =  r, r3 = &c
+  ldrb r4, [r0, #0] @r4 = a0; r0 = &a, r1 = &b, r2 = &rnd, r3 = &c
+  ldrb r5, [r0, #1] @r5 = a1; r0 = &a, r1 = &b, r2 = &rnd, r3 = &c
+  ldrb r6, [r1, #0] @r6 = b0; r0 = &a, r1 = &b, r2 = &rnd, r3 = &c
+  ldrb r7, [r1, #1] @r7 = b1; r0 = &a, r1 = &b, r2 =  &rnd, r3 = &c
 
 @@@@ Reducing the use of LDRB instruction: ldrb rx, [r0, #0] @ rx = a0; --> mov rx, r11 
   mov  r11, r4   @ r11 = b1
