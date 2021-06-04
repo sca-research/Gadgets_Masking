@@ -170,8 +170,8 @@ Isw_3:
   mov  r0, r9          @ r0 = &a
   mov  r1, r10         @ r1 = &b
   ldrb r0, [r0, #0]    @ r0 = a0
-  ldrb r1, [r1, #3]    @ r1 = b3 @ using r3 to avoid  loading b3 again
-  mov  r11, r1         @ r11 = b3 saving b3
+  ldrb r1, [r1, #3]    @ r1 = b3 
+  mov  r11, r1         @ r11 = b3 @saving b3
   bl   gfmul           @ r0 = a0 * b3
 
   ldrb r3, [r2, #2]    @ r3 = rnd2
@@ -179,7 +179,7 @@ Isw_3:
 
   mov  r0, r9          @ r0 = &a
   mov  r1, r10         @ r1 = &b
-  ldrb r7, [r0, #3]    @ r7 = a3   @ using r7 to avoid  loading b3 again
+  ldrb r7, [r0, #3]    @ r7 = a3   @ using r7 to avoid  loading a3 again
   mov  r0, r7          @ r0 = a3
   ldrb r1, [r1, #0]    @ r1 = b0
   bl   gfmul           @ r0 = a3 * b0
