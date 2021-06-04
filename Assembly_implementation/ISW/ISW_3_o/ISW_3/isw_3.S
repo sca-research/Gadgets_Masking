@@ -54,23 +54,17 @@ Isw_3:
 @@@@ a2 * b2
   mov  r0, r9       @ r0 = &a
   mov  r1, r10      @ r1 = &b
-  ldrb r2, [r0, #2] @ r2 = a2;  r0 = &a, r1 = &b 
-  ldrb r3, [r1, #2] @ r3 = b2;  r0 = &a, r1 = &b
-  mov  r0, r2       @ r0 = a2
-  mov  r1, r3       @ r1 = b2
+  ldrb r0, [r0, #2] @ r2 = a2;  r0 = &a, r1 = &b 
+  ldrb r1, [r1, #2] @ r3 = b2;  r0 = &a, r1 = &b
   bl   gfmul        @ r0 = a2 * b2
-  mov  r3, r8
   strb r0, [r3, #2] @ Storing (a2 * b2) in c2
 
 @@@@ a3 * b3
   mov  r0, r9       @ r0 = &a
   mov  r1, r10      @ r1 = &b
-  ldrb r2, [r0, #3] @ r2 = a3;  r0 = &a, r1 = &b 
-  ldrb r3, [r1, #3] @ r3 = b3;  r0 = &a, r1 = &b 
-  mov  r0, r2       @ r0 = a3
-  mov  r1, r3       @ r1 = b3
+  ldrb r0, [r0, #3] @ r2 = a3;  r0 = &a, r1 = &b 
+  ldrb r1, [r1, #3] @ r3 = b3;  r0 = &a, r1 = &b 
   bl   gfmul        @ r0 = a3 * b3
-  mov  r3, r8
   strb r0, [r3, #3] @ Storing (a3 * b3) in c3
 
 
