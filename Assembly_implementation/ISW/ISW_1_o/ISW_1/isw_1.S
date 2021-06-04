@@ -20,7 +20,7 @@ Isw_1:
   mov r8, r3    @r8 = &c
 
 @@@@@ Loading arguments @@@@@@@@@@@@
-  ldrb r2, [r2, #0] @r2 = r ; r0 = &a, r1 = &b, r2 = &r, r8 = &c
+  ldrb r2, [r2, #0] @r2 = r ; r0 = &a, r1 = &b, r2 = &rnd, r8 = &c
   ldrb r3, [r0, #0] @r3 = a0; r0 = &a, r1 = &b, r2 =  r, r8 = &c
   ldrb r4, [r0, #1] @r4 = a1; r0 = &a, r1 = &b, r2 =  r, r8 = &c
   ldrb r5, [r1, #0] @r5 = b0; r0 = &a, r1 = &b, r2 =  r, r8 = &c
