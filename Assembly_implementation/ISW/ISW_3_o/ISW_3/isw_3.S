@@ -24,10 +24,10 @@ Isw_3:
 @@@@@ Saving r0 (the address of the input a)
   mov  r9, r0     @ r9 = &a
 
-@@@@@ Saving r1 (the address of the input a)
+@@@@@ Saving r1 (the address of the input b)
   mov  r10, r1    @ r10 = &b
 
-@@@@@ Saving r2 (the address of the input a)
+@@@@@ Saving r2 (the address of the input rnd)
   mov  r11, r2    @ r11 = &rnd
 
 
