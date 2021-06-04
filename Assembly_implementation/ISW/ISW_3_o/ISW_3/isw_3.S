@@ -6,7 +6,7 @@
   .extern table       @@@@ table is used for gfmult
   
 @@@@ extern void Isw_3(uint8_t* inputa: addres: r0, uint8_t* inputb: address: r1, uint8_t* rnd: address: r2, uint8_t* output: address: r3);
-@inputa: a0-a3 inputb: b0-b3, rnd: r0-r6, output: c: c0-c3
+@inputa: a0-a3 inputb: b0-b3, rnd: rnd0-rnd6, output: c: c0-c3
 
 
 .global Isw_3
