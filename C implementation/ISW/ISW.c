@@ -3,7 +3,7 @@
 
 
 /*
-    Seminal_ISW(INPUT: input_a[Mask_ORD+1], INPUT: input_b[Mask_ORD+1],INPUT: uint8_t * rnd_DOM, OUTPUT: c[Mask_ORD+1])
+    Seminal_ISW(INPUT: input_a[Mask_ORD+1], INPUT: input_b[Mask_ORD+1],INPUT: uint8_t * rnd, OUTPUT: c[Mask_ORD+1])
     c = a * b
         The number of randomness: Mask_ORD * (Mask_ORD+1) /2;
         */
