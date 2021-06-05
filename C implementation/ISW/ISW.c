@@ -11,7 +11,7 @@
     void Seminal_ISW(uint8_t* input_a, uint8_t* input_b,uint8_t* rnd, uint8_t* c)
     {
 /* Expanding randomness vector:
-    Here the 1-dimension vector (rnd[rand-n]) (r0,r1,r2, ..., r(rand_n-1)) became to a vector[Mask+ORD+1][Mask+ORD+1]
+    Here the 1-dimension vector (rnd[rand-n]) (r0,r1,r2, ..., r(rand_n-1)) become to a vector[Mask+ORD+1][Mask+ORD+1]
     as below: example for 3-dimension
                                               0   r0   r1
             input: (r0,r1,r2) ---> output:    r0   0   r2
