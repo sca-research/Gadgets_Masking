@@ -1,5 +1,5 @@
 /*
-Paper: Randomness Complexity of Private Circuits for Multiplication, Algorithm 3
+Paper: Randomness Complexity of Private Circuits for Multiplication, Algorithm 5
 */
 #include "stdint.h"
 #include "BBPP_3.h"
