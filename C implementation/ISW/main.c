@@ -1,4 +1,4 @@
-/*Here the correctness of the gadget is checked with random inputs (a and b).*/
+/*Here the correctness of the gadget is checked with random inputs.*/
 
 #include "stdio.h" //printf
 #include "stdlib.h" //srand()
@@ -6,43 +6,49 @@
 #include "ISW.h"
 
 uint8_t gmul(uint8_t a, uint8_t b);
-void Mask(uint8_t* y, uint8_t x);
-// The number of randomness in ISW multiplication gadget
-int rnd_n = Mask_ORD * (Mask_ORD+1) /2;
+void Mask(uint8_t x, uint8_t* rnd, uint8_t* y);
+int rnd_n = Mask_ORD * (Mask_ORD+1) /2; // The number of randomness in ISW multiplication gadget
 //////////////////////////////////////////////////////////////////////
 int main(void)
 {
     time_t t;
     srand((unsigned) time(&t));
 
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 100; i++) {
 
-        // Input shares of the Gadget (a=a_0,a_1,...,a_d and b=b_0,b_1,...,b_d)
-        static uint8_t a[Mask_ORD+1];
-        static uint8_t b[Mask_ORD+1];
-        // Different and random inputs
+        // Inputs
         uint8_t input_a = rand() % 256;
         uint8_t input_b = rand() % 256;
 
         // Input shares of the Gadget (a=a_0,a_1,...,a_d and b=b_0,b_1,...,b_d)
-        Mask(a, input_a);
-        Mask(b, input_b);
+        static uint8_t a[Mask_ORD+1];
+        static uint8_t b[Mask_ORD+1];
 
         // Output of the Gadget is c_0, c_1, ..., c_d such that c_0 + c_1 + ... + c_d = c (c=a*b)
         uint8_t c[Mask_ORD + 1];
 
-        // Random number: on_the_fly
-        static uint8_t rnd_f[Mask_ORD * (Mask_ORD+1) /2];
-        for (int k = 0; k <rnd_n; k++){
-            rnd_f[k] = rand() % 256;
-            //printf( "  %02x  ", rnd_f[k]);
+        static uint8_t rnd_a[Mask_ORD]; // Random number for masking input a
+        static uint8_t rnd_b[Mask_ORD]; // Random number for masking input b
+        static uint8_t rnd_isw[Mask_ORD * (Mask_ORD+1) /2]; // Random number for isw multiplication
+
+        for (int k = 0; k <Mask_ORD; k++) {
+            rnd_a[k] = rand() % 256;
+            rnd_b[k] = rand() % 256;
         }
+
+        for (int k = 0; k <rnd_n; k++){
+            rnd_isw[k] = rand() % 256;
+        }
+
+        // Input shares of the Gadget (a=a_0,a_1,...,a_d and b=b_0,b_1,...,b_d)
+        Mask(input_a, rnd_a, a);
+        Mask(input_b, rnd_b, b);
 
         /*
         Seminal_ISW(INPUT: a[Mask_ORD+1], INPUT: b[Mask_ORD+1], INPUT: rnd[Mask_ORD * (Mask_ORD+1)/2], OUTPUT: c[Mask_ORD])
         c = a * b
-        rnd: random numbers (on_the_fly)*/
-        Seminal_ISW(a, b, rnd_f, c);
+        rnd_isw: random numbers (on_the_fly)*/
+        Seminal_ISW(a, b, rnd_isw, c);
 
         // Verifying the Gadget
         // Comparing the output of the Gadget with the unmasked multiplication
@@ -51,25 +57,25 @@ int main(void)
             output ^= c[i];
         }
 
-        // printf(" \n a: %02x  \n b: %02x", a, b );
-        //printf(" \n Unmasked_c = a * b: %02x \n     Mask_c = a * b: %02x ",gfMul(input_a,input_b) , output);
+        printf("\n____________________________________________________________");
+        printf(" \n a: %02x  \n b: %02x", input_a, input_b );
+        printf(" \nUnmasked_c = a * b: %02x\nMask_c = a * b: %02x ",gfMul(input_a,input_b) , output);
         if (output != gmul(input_a, input_b)) {
             printf(" \n Error: a = %02x , b = %02x and Num_shares: %0d \n", input_a, input_b, Mask_ORD+1);
+            break;
         }
-        else{
-            printf(" CORRECT ");
-        }
+
     }
 }
 
 
-void Mask(uint8_t* y, uint8_t x)
+void Mask(uint8_t x, uint8_t* rnd, uint8_t* y)
 {
-    y[0] = x;
-    for(int i = 1; i <= Mask_ORD; i++)
+    y[Mask_ORD] = x;
+    for(int i = 0; i < Mask_ORD; i++)
     {
-        y[i]=  rand() % 256;
-        y[0] = y[0] ^ y[i];
+        y[i]=  rnd[i];
+        y[Mask_ORD] ^= y[i];
     }
 }
 
