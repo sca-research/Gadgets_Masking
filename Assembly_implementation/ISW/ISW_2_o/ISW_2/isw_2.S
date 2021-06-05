@@ -37,7 +37,7 @@ Isw_2:
   ldrb r7, [r1, #1] @r7 = b1; r0 = &a, r1 = &b, r2 = &rnd, r3 = &c
 
 @@@@ Reducing the use of LDRB instruction: ldrb rx, [r0, #0] @ rx = a0; --> mov rx, r11 
-  mov  r11, r4   @ r11 = b1
+  mov  r11, r4   @ r11 = a0
 
 @@@@@@@@@@ Computing: ai * bi
 @@@@@@ In gfmul, r0 and r1 are the arguments
