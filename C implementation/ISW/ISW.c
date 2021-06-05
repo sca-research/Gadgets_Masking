@@ -1,7 +1,6 @@
 #include "stdint.h"
 #include "ISW.h"
 
-
 /*
     Seminal_ISW(INPUT: input_a[Mask_ORD+1], INPUT: input_b[Mask_ORD+1],INPUT: uint8_t * rnd, OUTPUT: c[Mask_ORD+1])
     c = a * b
@@ -25,15 +24,16 @@
         for (i = 0; i < Mask_ORD + 1; i++) {
             r[i][i] = 0;
             for (j = i + 1; j < Mask_ORD + 1; j++) {
+
                 // index variable is for producing numbers 0 to rand_n = Mask_ORD * (Mask_ORD+1)/2;
                 int index = (i * (Mask_ORD + 1)) - (i * (i + 1) / 2) + j - i - 1;
                 r[i][j] = rnd[index];
+
                 // The order is important
                 r[j][i] = (r[i][j] ^ gfMul(input_a[i], input_b[j])) ^ gfMul(input_a[j], input_b[i]);
             }
         }
 
-        
         for (i = 0; i < Mask_ORD+1; i++){
             c[i]= gfMul(input_a[i], input_b[i]);
             
@@ -45,7 +45,21 @@
         }
     }
 
-
+uint8_t gfMul(uint8_t a, uint8_t b)
+{
+    int s = 0;
+    s = table[a] + table[b];
+    /* Get the antilog */
+    s = table[s+256];
+/*
+    Checking a=0 or b=0, without conditional branch: if (a==0 or b==0){return 0;} else{return s;}
+     Countermeasure for Power analysis attacks
+*/
+    uint8_t tmp = 0;
+    tmp = b & (-a >> 8);
+    s = s & (-tmp >> 8);
+    return s;
+}
 
 /*
 uint8_t gfMul(uint8_t a, uint8_t b)
@@ -72,19 +86,3 @@ uint8_t gfMul(uint8_t a, uint8_t b)
     return s;
 }
 */
-
-uint8_t gfMul(uint8_t a, uint8_t b)
-{
-    int s = 0;
-    s = table[a] + table[b];
-    /* Get the antilog */
-    s = table[s+256];
-/*
-    Checking a=0 or b=0, without conditional branch: if (a==0 or b==0){return 0;} else{return s;}
-     Countermeasure for Power analysis attacks
-*/
-    uint8_t tmp = 0;
-    tmp = b & (-a >> 8);
-    s = s & (-tmp >> 8);
-    return s;
-}
