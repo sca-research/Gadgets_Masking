@@ -29,7 +29,7 @@ int main(void)
 
         static uint8_t rnd_a[Mask_ORD]; // Random number for masking input a
         static uint8_t rnd_b[Mask_ORD]; // Random number for masking input b
-        static uint8_t rnd_Dom_indep[Mask_ORD * (Mask_ORD+1) /2]; // Random number for Dom_Indep// multiplication
+        static uint8_t rnd_Dom_indep[Mask_ORD * (Mask_ORD+1) /2]; // Random number for Dom_Indep multiplication
 
         for (int k = 0; k <Mask_ORD; k++) {
             rnd_a[k] = rand() % 256;
