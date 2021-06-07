@@ -7,7 +7,7 @@
     DOM_independent(INPUT: input_a[Mask_ORD+1], INPUT: input_b[Mask_ORD+1], INPUT: rnd[Mask_ORD * (Mask_ORD+1)/2], OUTPUT: c[Mask_ORD+1])
     c = a * b
     rnd: random numbers (on_the_fly)*/
-    void DOM_independent(uint8_t* input_a, uint8_t* input_b, uint8_t* rnd, uint8_t* c){
+    void DOM_independent(uint8_t* a, uint8_t* b, uint8_t* rnd, uint8_t* c){
         int i, j;
         // The number of randomness in DOM_indep multiplication gadget
         int rand_n = Mask_ORD * (Mask_ORD+1)/2;
@@ -20,13 +20,13 @@
                 int p = (Mask_ORD ) * i + j;
                 if (i == j){
                     // Inner_products
-                    output = output ^  gfMul(input_a[i], input_b[j]);
+                    output = output ^  gfMul(a[i], b[j]);
                 }
                 else if (j > i){
-                    cross_product[p] = (gfMul(input_a[i], input_b[j])) ^ rnd[i + (j*(j-1)/2)];
+                    cross_product[p] = (gfMul(a[i], b[j])) ^ rnd[i + (j*(j-1)/2)];
                 }
                 else{
-                    cross_product[p] = (gfMul(input_a[i], input_b[j])) ^ rnd[j + (i*(i-1)/2)];
+                    cross_product[p] = (gfMul(a[i], b[j])) ^ rnd[j + (i*(i-1)/2)];
                 }
                  if (i!=j){
 
