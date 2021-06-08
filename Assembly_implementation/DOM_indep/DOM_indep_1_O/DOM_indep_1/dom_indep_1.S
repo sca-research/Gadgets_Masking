@@ -27,35 +27,35 @@ Dom_indep_1:
   ldrb r6, [r1, #1] @ r6 = b1; r0 = &a, r1 = &b, r2 = rnd0,    r8 = &c
   
 @@@@@@@@@@ Computing: ci
-@@@@@ c0 = (a0 * b0) ^ (a0 * b1) ^ rnd0
+@@@@@ c0 = (a0 * b0) ^ [(a0 * b1) ^ rnd0]
 
   mov  r0, r3       @ r0 = a0
   mov  r1, r4       @ r1 = b0
   bl   gfmul        @ r0 = a0 * b0
-   mov  r7, r0       @ r7 = a0 * b0
+  mov  r7, r0       @ r7 = a0 * b0
 
   mov  r0, r3       @ r0 = a0
   mov  r1, r6       @ r1 = b1
   bl   gfmul        @ r0 = a0 * b1
 
-  eors r7, r0       @ r7 = (a0 * b0) ^ (a0 * b1)
+  eors r0, r2       @ r0 = (a0 * b1) ^ rnd0
   
-  eors r7, r2       @ r7 = c0 = (a0 * b0) ^ (a0 * b1) ^ rnd0
+  eors r7, r0       @ r7 = c0 = (a0 * b0) ^ [(a0 * b1) ^ rnd0]
 
 
-@@@@@ c1 = (a1 * b0) ^ rnd0 ^ (a1 * b1)
+@@@@@ c1 = [(a1 * b0) ^ rnd0] ^ (a1 * b1)
 
   mov  r0, r5       @ r0 = a1
   mov  r1, r4       @ r1 = b0
   bl   gfmul        @ r0 = a1 * b0
 
-  eors r2, r0       @ r2 = (a1 * b0) ^ rnd0
+  eors r2, r0       @ r2 = [(a1 * b0) ^ rnd0]
 
   mov  r0, r5       @ r0 = a1
   mov  r1, r6       @ r1 = b1
   bl   gfmul        @ r0 = a1 * b1
 
-  eors r2, r0       @ r2 = c1 = (a1 * b0) ^ rnd0 ^ (a1 * b1)
+  eors r2, r0       @ r2 = c1 = [(a1 * b0) ^ rnd0] ^ (a1 * b1)
   
   
   mov  r3, r8
