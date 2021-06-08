@@ -6,7 +6,7 @@
 void Mask(uint8_t x, uint8_t* rnd, uint8_t* y);
 uint8_t gmul(uint8_t a, uint8_t b);
 
-/*The number of shares: Mask_order+1: 1+1=2*/
+/*The number of shares: Mask_order+1: 2+1=3*/
 int  share_n = 3;
 
 /*The number of randomness for Dom_indep: Mask_order*(Mask_order + 1)/2: 2*(2+1)/2=3
