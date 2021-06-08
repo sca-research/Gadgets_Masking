@@ -26,13 +26,23 @@ Dom_indep_1:
   ldrb r5, [r0, #1] @ r5 = a1; r0 = &a, r1 = &b, r2 = rnd0,    r8 = &c
   ldrb r6, [r1, #1] @ r6 = b1; r0 = &a, r1 = &b, r2 = rnd0,    r8 = &c
   
+
+@@@@@@@@@@ Computing: ai * bi
+@@@@@@ In gfmul, r0 and r1 are the arguments
+@@@@ a0 * b0
+  mov  r0, r3   @ r0 = a0
+  mov  r1, r4   @ r1 = b0
+  bl   gfmul    @ r0 = a0 * b0
+  mov  r7, r0   @ r7 = a0 * b0
+
+@@@@ a1 * b1
+  mov  r0, r5   @ r0 = a1
+  mov  r1, r6   @ r1 = b1
+  bl   gfmul    @ r0 = a1 * b1
+  mov  r9, r0   @ r9 = a1 * b1
+
 @@@@@@@@@@ Computing: ci
 @@@@@ c0 = (a0 * b0) ^ [(a0 * b1) ^ rnd0]
-
-  mov  r0, r3       @ r0 = a0
-  mov  r1, r4       @ r1 = b0
-  bl   gfmul        @ r0 = a0 * b0
-  mov  r7, r0       @ r7 = a0 * b0
 
   mov  r0, r3       @ r0 = a0
   mov  r1, r6       @ r1 = b1
@@ -49,11 +59,10 @@ Dom_indep_1:
   mov  r1, r4       @ r1 = b0
   bl   gfmul        @ r0 = a1 * b0
 
-  eors r2, r0       @ r2 = [(a1 * b0) ^ rnd0]
+  eors r0, r2       @ r2 = [(a1 * b0) ^ rnd0]
 
-  mov  r0, r5       @ r0 = a1
-  mov  r1, r6       @ r1 = b1
-  bl   gfmul        @ r0 = a1 * b1
+  mov  r2, r9       @ r2 = a1 * b1
+
 
   eors r2, r0       @ r2 = c1 = [(a1 * b0) ^ rnd0] ^ (a1 * b1)
   
