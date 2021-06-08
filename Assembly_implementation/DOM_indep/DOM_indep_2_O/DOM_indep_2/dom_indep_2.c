@@ -91,7 +91,7 @@ void Mask(uint8_t x, uint8_t* rnd, uint8_t* y)
 {
     y[0] = rnd[0];
     y[1] = rnd[1];
-    y[2] = x ^ rnd[0] ^ y[1];
+    y[2] = x ^ rnd[0] ^ rnd[1];
 
 }
 
