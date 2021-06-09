@@ -64,7 +64,7 @@ Dom_indep_3:
   mov  r0, r8       @ r0 = &a
   mov  r1, r9       @ r1 = &b
   ldrb r0, [r0, #3] @ r0 = a3;  r0 = a3, r1 = &b // for computing c0, a3 is not needed, so it is loaded into r0, then it will be clear
-  ldrb r1, [r1, #3] @ r1 = b3;  r0 = &a, r1 = b3 
+  ldrb r1, [r1, #3] @ r1 = b3;  r0 = a3, r1 = b3 
   mov  r10, r1      @ r10 = b3  @ Saving b3 // for computing c0, b3 is needed
   bl   gfmul        @ r0 = a3 * b3
 
