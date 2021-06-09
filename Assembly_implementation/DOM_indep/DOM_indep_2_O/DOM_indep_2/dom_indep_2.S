@@ -114,7 +114,7 @@ Dom_indep_2:
   mov  r1, r4         @ r1 = b2
   bl   gfmul          @ r0 = a1 * b2
 
-  ldrb r5, [r2, #2]   @ r5 = rnd2
+  ldrb r5, [r2, #2]   @ r5 = rnd2  // r5 = a1, for computing cc, a1 (alone) is not needed, so, r5 can be used here
   mov  r10, r5        @ r10 = rnd2
 
   eors r5, r0         @ r5 = [(a1 * b2) ^ rnd2]
