@@ -1,4 +1,4 @@
-//DOM-dep: Algorithm2 in  "Glitch-Resistant Masking Revisitedor Why Proofs in the Robust Probing Model are Needed"
+//DOM-dep: Algorithm2 in  "Glitch-Resistant Masking Revisited or Why Proofs in the Robust Probing Model are Needed"
 // Based on the description in "Domain-oriented  masking:Compact masked hardware implementations with arbitrary protection orde"
 #include "stdint.h"
 #include "DOM_Dep.h"
