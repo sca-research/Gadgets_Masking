@@ -13,7 +13,7 @@ def uart(ser_port, num_repeat):
         transactions num_repeat times"""
 
     # The length of the TX data in Byte (B)
-    input_length = 8  # a: 1B, b: 1B, rnd: 7B (2B for sharesing a, 2B for sharesing b, 2B for Belaid multiplication)
+    input_length = 8  # a: 1B, b: 1B, rnd: 7B (2B for masking a, 2B for masking b, 2B for Belaid multiplication)
 
     # The length of the RX data in Byte (B)
     output_length = 12  # a: 1B, b: 1B, shares_a: 3B, shares_b: 3B, shares_a*b: 3B, output of gmul func in main.c: 1B
