@@ -1,14 +1,13 @@
 #include "stdint.h"
 #ifndef Mask_ORD
-#define Mask_ORD 8 //Mask_ORD >= 2
+#define Mask_ORD 3 //Mask_ORD >= 2
 #endif
 
 
 uint8_t gfMul(uint8_t a, uint8_t b);
-void Mask(uint8_t y[Mask_ORD+1], uint8_t* x);
-void sum_vect(uint8_t in_vect[Mask_ORD+1], uint8_t sum);
-void DOM_dependent(uint8_t* input_a, uint8_t* input_b, uint8_t* c);
-void DOM_independent(uint8_t* input_a, uint8_t* input_b, uint8_t* c);
+void DOM_dependent(uint8_t* a, uint8_t* b, uint8_t* rnd, uint8_t* c);
+uint8_t decode(uint8_t* x);
+void DOM_independent(uint8_t* a, uint8_t* b, uint8_t* rnd, uint8_t* c);
 
 static const uint8_t table[798] = {
         0x00, 0x00, 0x19, 0x01, 0x32, 0x02, 0x1a, 0xc6, 0x4b, 0xc7, 0x1b, 0x68, 0x33, 0xee, 0xdf, 0x03,
