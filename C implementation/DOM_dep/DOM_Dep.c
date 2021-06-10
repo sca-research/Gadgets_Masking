@@ -1,86 +1,92 @@
-//DOM-dep
+//DOM-dep: Algorithm2 in  "Glitch-Resistant Masking Revisitedor Why Proofs in the Robust Probing Model are Needed"
+// Based on the description in "Domain-oriented  masking:Compact masked hardware implementations with arbitrary protection orde"
 #include "stdint.h"
-#include "stdlib.h" //rand()
 #include "DOM_Dep.h"
+#include "stdio.h" //printf
 
-static uint8_t a[Mask_ORD+1];
-static uint8_t b[Mask_ORD+1];
+void DOM_dependent(uint8_t* a, uint8_t* b, uint8_t* rnd, uint8_t* c)
+{
+    int i = 0;
+    uint8_t out_Dom_indep[Mask_ORD+1];
+    uint8_t z[Mask_ORD+1]; // Randomness for masking  the input b (b0-bd)
+    uint8_t rnd_dom_indep[Mask_ORD * (Mask_ORD+1) /2]; // Randomness for DOM_independent function
+    uint8_t x[Mask_ORD+1]; // Masked b (x0-xd)
+    uint8_t x_sum = 0;
 
-    void Mask(uint8_t y[Mask_ORD+1], uint8_t* x){
-        y[0] = x;
-        for(int i = 1; i <= Mask_ORD; i++){
-            y[i]=  rand() % 256;
-            y[0] = y[0] ^ y[i];
-        }
-    }
 
-    void sum_vect(uint8_t in_vect[Mask_ORD+1], uint8_t sum)
+    // The first d (Mask_ORD) randomnesses in rnd is z[Mask_ORD+1] = rnd[0:Mask_ORD],
+    // and is used for computing x[i] = b[i] ^ z[i]
+    for (i = 0; i < Mask_ORD+1; i++)
     {
-        for(int i=1; i< Mask_ORD+1; i++){
-            sum += in_vect[i];
-        }
+        x[i] = b[i] ^ rnd[i];
+        z[i] = rnd[i];
     }
 
-    void DOM_independent(uint8_t* input_a, uint8_t* input_b, uint8_t* c){
+    x_sum = decode(x);
 
-        int i, j;
-        int all_terms = Mask_ORD * (Mask_ORD+1)/2;
-        uint8_t r[all_terms];
-        uint8_t reg[2*all_terms];
+    // The last (Mask_ORD * (Mask_ORD+1) /2) randomnesses in rnd is rnd_dom_indep[    uint8_t rnd_dom_indep[Mask_ORD * (Mask_ORD+1) /2];
+    // and is used in DOM_independent function
+    int rnd_n_dom = Mask_ORD * (Mask_ORD+1)/2;
 
-        for (i = 0; i < all_terms; i++){
-            r [i]= rand() % 256;
-        }
-        for (i = 0; i < Mask_ORD + 1; i++){
-            uint8_t output = 0;
-            for (j = 0; j < Mask_ORD + 1; j++){
-                int p = (Mask_ORD + 1) * i + j;
-                if (i == j){
-                    output = output ^  gfMul(input_a[i],input_b[j]);
-                }
-                if (j > i){
-                    reg[p] = (gfMul(input_a[i], input_b[j])) ^ r[i + (j*(j-1)/2)];
-                }
-                else{
-                    reg[p] = (gfMul(input_a[i], input_b[j])) ^ r[j + (i*(i-1)/2)];
-                }
-                if (i!=j){
+    for (i = 0; i < rnd_n_dom; i++)
+    {
+        rnd_dom_indep[i] = rnd[Mask_ORD+1+i];
+    }
+    DOM_independent(a, z, rnd_dom_indep, out_Dom_indep);
 
-                    output = output ^ reg[p];
-                }
+    for (i = 0; i < Mask_ORD+1; i++)
+    {
+        c[i] = out_Dom_indep[i] ^ (gfMul(a[i] , x_sum));
+    }
+}
+
+void DOM_independent(uint8_t* a, uint8_t* b, uint8_t* rnd, uint8_t* c)
+{
+    int i, j = 0;
+    // The number of randomness in DOM_indep multiplication gadget
+    int rand_n = Mask_ORD * (Mask_ORD+1)/2;
+
+    uint8_t cross_product[2*rand_n];
+
+    for (i = 0; i < Mask_ORD + 1; i++)
+    {
+        uint8_t output = 0;
+        for (j = 0; j < Mask_ORD + 1; j++)
+        {
+            int p = (Mask_ORD ) * i + j;
+            if (i == j)
+            {
+                // Inner_products
+                output = output ^  gfMul(a[i], b[j]);
             }
-            c[i] = output;
+            else if (j > i)
+            {
+                cross_product[p] = (gfMul(a[i], b[j])) ^ rnd[i + (j*(j-1)/2)];
+            }
+            else
+            {
+                cross_product[p] = (gfMul(a[i], b[j])) ^ rnd[j + (i*(i-1)/2)];
+            }
+            if (i!=j)
+            {
+                output = output ^ cross_product[p];
+            }
         }
-
+        c[i] = output;
     }
+}
 
-
-
-
-    void DOM_dependent(uint8_t* input_a, uint8_t* input_b, uint8_t* c)
+// x=[x0, x1, ..., xd], sum=x0 + x1 +...+ xd
+uint8_t decode(uint8_t* x)
+{
+    uint8_t sum = 0;
+    for(int i=0; i< Mask_ORD+1; i++)
     {
-        int i;
-        uint8_t x_sum;
-        Mask(a, input_a);
-        Mask(b, input_b);
-
-        uint8_t out_Dom_ind[Mask_ORD+1];
-        uint8_t z[Mask_ORD+1];
-        uint8_t x[Mask_ORD+1];
-
-        for (i = 0; i < Mask_ORD+1; i++){
-            z[i] = rand() % 256;
-            x[i] = b[i] ^ z[i];
-        }
-
-        sum_vect(x, x_sum);
-        DOM_independent(a, b, out_Dom_ind);
-
-        for (i = 0; i < Mask_ORD+1; i++){
-            c[i] = out_Dom_ind[i] ^ (gfMul(a[i] , x_sum));
-        }
-
+        sum ^= x[i];
     }
+    return sum;
+}
+
 /* uint8_t gfMul(uint8_t a, uint8_t b)
     {
         int s = 0;
