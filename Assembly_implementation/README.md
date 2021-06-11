@@ -6,10 +6,11 @@ isw_1
 **Each file**: The implementation of the d-Order multiplication (gadget) in Arm assembly, with THUMB-16 instructions.
 
 **main.c** is for testing the multiplication function.
-For more clarification, please see [C implementation](https://github.com/sca-research/Gadgets_Masking)
 
 **test_i.py**: Transfering data through UART to/from the [SCALE board](https://github.com/danpage/scale).
 
+
+For more clarification, please see [C implementation](https://github.com/sca-research/Gadgets_Masking)
 
 
 Testing:
