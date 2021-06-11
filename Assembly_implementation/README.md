@@ -1,4 +1,3 @@
-isw_1
 # Arm assembly (thumb-16 instructions)  for Cortex-M3  
 
 
@@ -17,11 +16,11 @@ Testing: (Example with ISW_1)
 
 Download [SCALE](https://github.com/danpage/scale).
 
-`$ git clone http://www.github.com/danpage/scale.git`
+`git clone http://www.github.com/danpage/scale.git`
 
-`$ cd scale ; export SCALE="${PWD}"`
+`cd scale ; export SCALE="${PWD}"`
 
-`$ git submodule update --init --recursive `
+`git submodule update --init --recursive `
 
 Copy  [ISW/ISW_1_o/ISW_1/ file](https://github.com/sca-research/Gadgets_Masking/tree/main/Assembly_implementation/ISW/ISW_1_o/ISW_1)
 in `scale/hw` directory.
