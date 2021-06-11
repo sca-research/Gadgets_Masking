@@ -75,9 +75,9 @@ Dom_indep_2:
 
   mov  r3, r2         @ r3 = b2
   mov  r2, r10        @ r2 = &rnd
-  ldrb r7, [r2, #0]   @ r7 = rnd0
+  ldrb r7, [r2, #0]   @ r7 = rnd0 // r7 = b1, for computing c1, b1 (alone) is not needed, so, r7 can be used here
   mov  r10, r7        @ r10 = rnd0    @ Saving for using in C1
-  eors r7, r0         @ r7 = [(a0 * b1) ^ rnd0]  // r7 = b1, for computing c1, b1 (alone) is not needed, so, r7 can be used here
+  eors r7, r0         @ r7 = [(a0 * b1) ^ rnd0]  
 
   mov  r0, r4         @ r0 = a0
   mov  r1, r3         @ r1 = b2
