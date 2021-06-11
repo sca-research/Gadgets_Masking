@@ -140,7 +140,7 @@ Dom_dep_3:
   mov  r1, r10        @ r1 = z3
   bl   gfmul          @ r0 = a1 * z3
 
-  ldrb r1, [r2, #8]   @ r4 = rand4 
+  ldrb r1, [r2, #8]   @ r1 = rand4 
   
   eors r1, r0         @ r1 = [(a1 * z3) ^ rand4] 
 
@@ -244,8 +244,8 @@ Dom_dep_3:
   mov  r3, r11        @ r3 = &c
   ldrb r0, [r3, #3]   @ r0 = a3 * z3
   
-  eors r6, r7         @ r2 = [(a3 * z0) ^ rand3] ^ [(a3 * z1) ^ rand4]
-  eors r1, r6         @ r6 = [(a3 * z0) ^ rand3] ^ [(a3 * z1) ^ rand4] ^ [(a3 * z2) ^ rand5] 
+  eors r6, r7         @ r6 = [(a3 * z0) ^ rand3] ^ [(a3 * z1) ^ rand4]
+  eors r1, r6         @ r1 = [(a3 * z0) ^ rand3] ^ [(a3 * z1) ^ rand4] ^ [(a3 * z2) ^ rand5] 
   eors r0, r1         @ r0 = [(a3 * z0) ^ rand3] ^ [(a3 * z1) ^ rand4] ^ [(a3 * z2) ^ rand5] ^ (a3 * z3)
 
  
@@ -263,19 +263,19 @@ Dom_dep_3:
   mov  r1, r9         @ r1 = &b
   ldrb r6, [r1, #0]   @ r6 = b0
   ldrb r7, [r1, #1]   @ r7 = b1
-  ldrb r3, [r1, #2]   @ r1 = b2
+  ldrb r3, [r1, #2]   @ r3 = b2
   ldrb r1, [r1, #3]   @ r1 = b3
   ldrb r0, [r2, #3]   @ r0 = z3
 
-  eors r6, r5         @ z0 ^ b0
+  eors r6, r5         @ r6 = z0 ^ b0
 
-  mov  r2, r10        @ r0 = z1
-  eors r7, r2         @ z1 ^ b1
-  eors r3, r4         @ z2 ^ b2
-  eors r1, r0         @ z3 ^ b3
+  mov  r2, r10        @ r2 = z1
+  eors r7, r2         @ r7 = z1 ^ b1
+  eors r3, r4         @ r3 = z2 ^ b2
+  eors r1, r0         @ r1 = z3 ^ b3
 
-  eors r6, r7         @ (z0 ^ b0) ^ (z1 ^ b1)
-  eors r6, r3         @ (z0 ^ b0) ^ (z1 ^ b1) ^ (z2 ^ b2)
+  eors r6, r7         @ r6 = (z0 ^ b0) ^ (z1 ^ b1)
+  eors r6, r3         @ r6 = (z0 ^ b0) ^ (z1 ^ b1) ^ (z2 ^ b2)
   eors r1, r6         @ r1 = x = (z0 ^ b0) ^ (z1 ^ b1) ^ (z2 ^ b2) ^ (z3 ^ b3)
 
 
@@ -287,12 +287,12 @@ Dom_dep_3:
 
   mov  r0, r8         @ r0 = &a
   ldrb r2, [r0, #1]   @ r2 = a1
-  ldrb r4, [r0, #2]   @ r5 = a2
-  ldrb r5, [r0, #3]   @ r0 = a3
+  ldrb r4, [r0, #2]   @ r4 = a2
+  ldrb r5, [r0, #3]   @ r5 = a3
   ldrb r0, [r0, #0]   @ r0 = a0
 
 
-  ldrb r6, [r3, #0]   @ r2 = c0
+  ldrb r6, [r3, #0]   @ r6 = c0
   ldrb r7, [r3, #1]   @ r7 = c1
   
 
