@@ -143,11 +143,11 @@ Dom_indep_3:
   mov  r1, r10        @ r1 = b3
   bl   gfmul          @ r0 = a1 * b3
 
-  ldrb r1, [r2, #4]   @ r4 = rnd4  // r4 = a1, for the rest computations a1 is not needed, so, r4 can be used here
-  
+  ldrb r1, [r2, #4]   @ r4 = rnd4  
   eors r1, r0         @ r1 = [(a1 * b3) ^ rnd4] 
 
-  mov  r4, r3         @ r4 = rnd2
+  mov  r4, r3         @ r4 = rnd2 // r4 = a1, for the rest computations a1 is not needed, so, r4 can be used here
+  
 
   mov  r3, r11        @ r3 = &c
   ldrb r0, [r3, #1]   @ r0 = a1 * b1
