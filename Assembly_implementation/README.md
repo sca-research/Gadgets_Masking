@@ -13,7 +13,7 @@ isw_1
 For more clarification, please see [C implementation](https://github.com/sca-research/Gadgets_Masking)
 
 
-Testing:
+Testing: (Example with ISW_1)
 
 Download [SCALE](https://github.com/danpage/scale).
 
