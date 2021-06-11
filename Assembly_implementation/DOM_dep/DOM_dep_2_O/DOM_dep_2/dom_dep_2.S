@@ -148,11 +148,11 @@ Dom_dep_2:
 
   mov  r5, r10        @ r5 = rand2 // r5 = a2; for computing x, a2 is not needed
   mov  r10, r2        @ r10 = &rand
-  eors r5, r0         @ r4 = [(a2 * z1) ^ rand2]
+  eors r5, r0         @ r5 = [(a2 * z1) ^ rand2]
 
   ldrb r0, [r3, #2]   @ r0 = a2 * z2
   
-  eors r5, r7         @ r4 = [(a2 * z0) ^ rand1] ^ [(a2 * z1) ^ rand2]
+  eors r5, r7         @ r5 = [(a2 * z0) ^ rand1] ^ [(a2 * z1) ^ rand2]
 
   eors r0, r5         @ r0 = [(a2 * z0) ^ rand1] ^ [(a2 * z1) ^ rand2] ^ (a2 * z2)
 
@@ -172,12 +172,12 @@ Dom_dep_2:
   ldrb r1, [r1, #2]   @ r1 = b2
   ldrb r0, [r2, #2]   @ r0 = z2
 
-  eors r6, r5         @ z0 ^ b0
-  eors r4, r7         @ z1 ^ b1
-  eors r1, r0         @ z2 ^ b2
+  eors r6, r5         @ r6 = z0 ^ b0
+  eors r4, r7         @ r4 = z1 ^ b1
+  eors r1, r0         @ r1 = z2 ^ b2
 
-  eors r6, r4         @ (z0 ^ b0) ^ (z1 ^ b1)
-  eors r1, r6         @ (z0 ^ b0) ^ (z1 ^ b1) ^ (z2 ^ b2)
+  eors r6, r4         @ r6 = (z0 ^ b0) ^ (z1 ^ b1)
+  eors r1, r6         @ r1 = (z0 ^ b0) ^ (z1 ^ b1) ^ (z2 ^ b2)
 
 
 @@@@@@@@@@ Computing: the outputs of DOM_depen ci: (ai * x) ^ ci
