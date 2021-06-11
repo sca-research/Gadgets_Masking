@@ -37,7 +37,7 @@ Dom_dep_2:
   ldrb r2, [r2, #2] @ r2 = z2; r0 = &a, r1 = &b, r2 = z2  , r3 = &c
 
 
-@@@@@@@@@@ Computing: ai * bi
+@@@@@@@@@@ Computing: ai * zi
 @@@@@@ In gfmul, r0 and r1 are the arguments
 @@@@ a0 * z0
   mov  r0, r4   @ r0 = a0
