@@ -7,6 +7,8 @@
 
 uint8_t gmul(uint8_t a, uint8_t b);
 void Mask(uint8_t x, uint8_t* rnd, uint8_t* y);
+
+//(Algorithm 7 in "Horizontal side-channel attacks and countermeasures on the ISW masking scheme")
 uint8_t refresh_mask(uint8_t* a, int index_start, int index_end, uint8_t* rnd, uint8_t* d);
 
 
