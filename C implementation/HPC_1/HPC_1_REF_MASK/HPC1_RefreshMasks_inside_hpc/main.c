@@ -34,32 +34,29 @@ int main(void) {
         */
         int rnd_n_Refresh = ((Mask_ORD+1) * log(Mask_ORD+1)) +1 ; // Number of randomness for RefreshMasks
         int rnd_n_DOM = Mask_ORD * (Mask_ORD+1) /2; // The number of randomness in DOM_indep multiplication gadget
+        int total_rnd_n = rnd_n_Refresh + rnd_n_DOM;
+        uint8_t rnd_hpc[total_rnd_n];
+
 
         static uint8_t rnd_a[Mask_ORD]; // Random number for masking input a
         static uint8_t rnd_b[Mask_ORD]; // Random number for masking input b
-        static uint8_t rnd_Dom_indep[Mask_ORD * (Mask_ORD+1) /2]; // Random number for Dom_Indep multiplication
-               uint8_t rnd_Refresh[rnd_n_Refresh];
 
         for (int k = 0; k <Mask_ORD; k++) {
             rnd_a[k] = rand() % 256;
             rnd_b[k] = rand() % 256;
         }
 
-        for (int k = 0; k < rnd_n_Refresh; k++) {
-            rnd_Refresh[k] = rand() % 256;
+        for (int k = 0; k < total_rnd_n; k++) {
+            rnd_hpc[k] = rand() % 256;
         }
 
-        for (int k = 0; k < rnd_n_DOM; k++) {
-            rnd_Dom_indep[k] = rand() % 256;
-        }
-
+//////////////////////////////////////////////////////////////////////////////////
         // Input shares of the Gadget (a=a_0,a_1,...,a_d and b=b_0,b_1,...,b_d)
         Mask(input_a, rnd_a, a);
         Mask(input_b, rnd_b, b);
 
         // Calling the HPC_1 gadget
-        hpc1(a, b, rnd_Refresh, rnd_Dom_indep, c);
-
+        hpc1(a, b, rnd_hpc, c);
 
         // Verifying the gadget
         uint8_t output = 0;
@@ -67,12 +64,13 @@ int main(void) {
             output ^= c[i];
            // printf("\n d%0d: %02x", i, c[i]);
         }
-        //printf("\nOUT  %02x", output);
-        //printf("\ngmul %02x", gmul(input_a, input_b));
-        //printf(" \n  a = %02x , b = %02x and Num_shares: %0d \n", input_a, input_b, Mask_ORD + 1);
+
 
         if (output != gmul(input_a, input_b)) {
-            printf(" \n Error: a = %02x , b = %02x and Num_shares: %0d \n", input_a, input_b, Mask_ORD + 1);
+            printf(" \n Error: a = %02x , b = %02x and Mask_order: %0d \n", input_a, input_b, Mask_ORD );
+            printf("\nOUT  %02x", output);
+            printf("\ngmul %02x", gmul(input_a, input_b));
+            printf(" \n  a = %02x , b = %02x and Mask_order: %0d \n", input_a, input_b, Mask_ORD);
             break;
         }
         else {
