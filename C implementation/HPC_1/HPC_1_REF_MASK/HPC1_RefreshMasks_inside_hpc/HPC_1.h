@@ -3,10 +3,10 @@
 #include <stdint.h>
 
 #ifndef Mask_ORD
-#define Mask_ORD 5
+#define Mask_ORD 0
 #endif
 
-void hpc1(uint8_t* input_a, uint8_t* input_b, uint8_t* rnd_Ref, uint8_t * rnd_DOM, uint8_t* c);
+void hpc1(uint8_t* input_a, uint8_t* input_b, uint8_t* rnd, uint8_t* c);
 
 uint8_t refresh_mask(uint8_t* a, int index_start, int index_end, uint8_t* rnd, uint8_t* d);
 uint8_t gfMul(uint8_t a, uint8_t b);
