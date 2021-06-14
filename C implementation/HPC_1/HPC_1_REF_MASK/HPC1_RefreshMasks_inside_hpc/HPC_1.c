@@ -29,7 +29,7 @@
      static uint8_t rnd_DOM[Mask_ORD * (Mask_ORD+1) /2]; // Random number for Dom_Indep multiplication
      static uint8_t share_0_mask[Mask_ORD + 1]; // The output of refresh_mask
      static uint8_t add_inb_share0[Mask_ORD + 1]; // Adding input_b and share_0_mask
-     static uint8_t input_b_Ref[Mask_ORD + 1]; // Register for the output of adding input_b and share_0_mask
+     //static uint8_t input_b_Ref[Mask_ORD + 1]; // Register for the output of adding input_b and share_0_mask
 
 // Random number for optimized refreshing
      for (int i = 0; i < rnd_n_Refresh; i++) {
@@ -49,13 +49,15 @@
 
     for (int i = 0; i <= Mask_ORD; i++) {
         add_inb_share0[i] = input_b[i] ^ share_0_mask[i];
-        input_b_Ref[i] =add_inb_share0[i]; // Register for the output of adding input_b and share_0_mask
+        //input_b_Ref[i] =add_inb_share0[i]; // Register for the output of adding input_b and share_0_mask
     }
 
 
     /*Multiplication part:*/
     ////////////////////////////////////////////////////////////////////
-    DOM_independent(input_a, input_b_Ref, rnd_DOM, c);
+   // DOM_independent(input_a, input_b_Ref, rnd_DOM, c);
+     DOM_independent(input_a, add_inb_share0, rnd_DOM, c);
+
 }
 
 
