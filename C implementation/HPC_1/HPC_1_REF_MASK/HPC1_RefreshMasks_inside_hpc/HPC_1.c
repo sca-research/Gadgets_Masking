@@ -7,6 +7,7 @@
 
 
 #include "HPC_1.h"
+#include "math.h" //log()
 
 /*
     hpc1(INPUT: input_a[Mask_ORD+1], INPUT: input_b[Mask_ORD+1], INPUT: uint8_t* rnd_Ref,INPUT: uint8_t * rnd_DOM, OUTPUT: c[Mask_ORD+1])
@@ -19,18 +20,32 @@
 
 ////////////////////////////////////////////////
 
- void hpc1(uint8_t* input_a, uint8_t* input_b, uint8_t* rnd_Ref, uint8_t * rnd_DOM, uint8_t* c) {
+ void hpc1(uint8_t* input_a, uint8_t* input_b, uint8_t* rnd, uint8_t* c) {
 
-    static uint8_t share_0_mask[Mask_ORD + 1]; // The output of refresh_mask
-    static uint8_t add_inb_share0[Mask_ORD + 1]; // Adding input_b and share_0_mask
-    static uint8_t input_b_Ref[Mask_ORD + 1]; // Register for the output of adding input_b and share_0_mask
+     int rnd_n_Refresh = ((Mask_ORD+1) * log(Mask_ORD+1)) + 1; // Number of randomness for RefreshMasks
+     int rnd_n_DOM = Mask_ORD * (Mask_ORD+1) /2; // The number of randomness in DOM_indep multiplication gadget
 
+     uint8_t rnd_Refresh[rnd_n_Refresh]; // Random number for optimized refreshing
+     static uint8_t rnd_DOM[Mask_ORD * (Mask_ORD+1) /2]; // Random number for Dom_Indep multiplication
+     static uint8_t share_0_mask[Mask_ORD + 1]; // The output of refresh_mask
+     static uint8_t add_inb_share0[Mask_ORD + 1]; // Adding input_b and share_0_mask
+     static uint8_t input_b_Ref[Mask_ORD + 1]; // Register for the output of adding input_b and share_0_mask
+
+// Random number for optimized refreshing
+     for (int i = 0; i < rnd_n_Refresh; i++) {
+         rnd_Refresh[i] = rnd[i];
+     }
+
+     // Random number for Dom_Indep multiplication
+     for (int i = 0; i <= rnd_n_DOM; i++) {
+         rnd_DOM[i] = rnd[i+ rnd_n_Refresh];
+     }
 
     /*Refresh part:*/
     ////////////////////////////////////////////////////////////////////
     uint8_t all_zero_input[Mask_ORD+1] = {0x00}; //a=a_0,a_1,...,a_d, such as a_i =0 --> a_0 +...+ a_d = 0
 
-    refresh_mask(all_zero_input, 0, Mask_ORD,  rnd_Ref, share_0_mask);
+    refresh_mask(all_zero_input, 0, Mask_ORD, rnd_Refresh, share_0_mask);
 
     for (int i = 0; i <= Mask_ORD; i++) {
         add_inb_share0[i] = input_b[i] ^ share_0_mask[i];
