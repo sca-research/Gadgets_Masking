@@ -18,7 +18,7 @@ void opt_refresh_mask(uint8_t* a, uint8_t* rnd, uint8_t* d){
     if (d_shares == 2){
         //  uint8_t* rnd: 2 elements
         t_reg_rnd0[0] = rnd[0];
-        t_reg_rnd0[1] = a[1] ^ rnd[0];
+        t_reg_rnd0[1] = rnd[0];
     }
 
     if (d_shares == 3){
