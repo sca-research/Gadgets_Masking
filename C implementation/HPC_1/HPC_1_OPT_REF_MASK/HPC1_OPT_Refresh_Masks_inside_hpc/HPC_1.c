@@ -31,7 +31,7 @@
 
 
      // Random number for optimized refreshing
-     for (int i = 0; i <= rnd_n_OPT_Refresh; i++) {
+     for (int i = 0; i < rnd_n_OPT_Refresh; i++) {
          rnd_OPT_Refresh[i] = rnd[i];
      }
 
