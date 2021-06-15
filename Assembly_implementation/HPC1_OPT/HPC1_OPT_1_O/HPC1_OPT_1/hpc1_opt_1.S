@@ -21,21 +21,21 @@ HPC1_opt_1:
 
 
 @@@@@ Optimized Refresh Mask:
-  ldrb r7, [r2, #0] @ r7 = rnd0;  r0 = &a, r1 = &b, r2 = &rnd, r8 = &c
-  ldrb r4, [r1, #0] @ r4 = b0;    r0 = &a, r1 = &b, r2 = rnd1,    r8 = &c
-  ldrb r6, [r1, #1] @ r6 = b1;    r0 = &a, r1 = &b, r2 = rnd1,    r8 = &c
+  ldrb r7, [r2, #0] @ r7 = rnd0;  r0 = &a, r1 = &b, r2 = &rnd, r8 = &c 
+  ldrb r4, [r1, #0] @ r4 = b0;    r0 = &a, r1 = &b, r2 = rnd1, r8 = &c  
+  ldrb r6, [r1, #1] @ r6 = b1;    r0 = &a, r1 = &b, r2 = rnd1, r8 = &c  
 
-  eors r4, r7       @ r4 = ref_b0
-  eors r6, r7       @ r6 = ref_b1
+  eors r4, r7       @ r4 = ref_b0  @ ref_b0 = b0 ^ rnd0
+  eors r6, r7       @ r6 = ref_b1  @ ref_b1 = b1 ^ rnd0
 
 
 @@@@@ Loading arguments @@@@@@@@@@@@
-  ldrb r2, [r2, #1] @ r2 = rnd1;   r0 = &a, r1 = &b, r2 = &rnd, r8 = &c
-  ldrb r3, [r0, #0] @ r3 = a0;     r0 = &a, r1 = &b, r2 = rnd1,    r8 = &c
-  ldrb r5, [r0, #1] @ r5 = a1;     r0 = &a, r1 = &b, r2 = rnd1,    r8 = &c
+  ldrb r2, [r2, #1] @ r2 = rnd1;  r0 = &a, r1 = &b, r2 = &rnd, r8 = &c
+  ldrb r3, [r0, #0] @ r3 = a0;    r0 = &a, r1 = &b, r2 = rnd1, r8 = &c
+  ldrb r5, [r0, #1] @ r5 = a1;    r0 = &a, r1 = &b, r2 = rnd1, r8 = &c
   
 
-@@@@@@@@@@ Computing: ai * bi
+@@@@@@@@@@ Computing: ai * ref_bi
 @@@@@@ In gfmul, r0 and r1 are the arguments
 @@@@ a0 * ref_b0
   mov  r0, r3   @ r0 = a0
@@ -70,7 +70,6 @@ HPC1_opt_1:
   eors r0, r2       @ r2 = [(a1 * ref_b0) ^ rnd1]
 
   mov  r2, r9       @ r2 = a1 * ref_b1
-
 
   eors r2, r0       @ r2 = c1 = [(a1 * ref_b0) ^ rnd1] ^ (a1 * ref_b1)
   
