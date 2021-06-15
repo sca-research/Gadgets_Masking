@@ -6,7 +6,7 @@
   .extern table       @@@@ table is used for gfmult
   
 @@@@ extern void Dom_indep_2(uint8_t* inputa: addres: r0, uint8_t* inputb: address: r1, uint8_t* rnd: address: r2, uint8_t* output: address: r3);
-@inputa: a0, a1, a2, inputb: b0, b1, b2, rnd: rnd0-rnd3, output: c: c0, c1, c2
+@inputa: a0, a1, a2, inputb: b0, b1, b2, rnd: rnd0-rnd2, output: c: c0, c1, c2
 
 
 .global Dom_indep_2
