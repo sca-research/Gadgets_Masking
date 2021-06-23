@@ -46,7 +46,7 @@ Then:
 
 or
 
-Copy the **run.sh** file in `scale/hw` directory and via terminal run **./run.sh ISW_1 isw_1**.
+Copy the **run.sh** file in `scale/hw` directory and via terminal run `./run.sh ISW_1 isw_1`.
 
 
 
