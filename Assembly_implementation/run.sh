@@ -1,5 +1,5 @@
 #! /bin/bash
-# ./run in terminal: Permission denied, solving: chmod +x ./run.sh, and then for running: ./run
+# ./run in terminal: Permission denied, solving: chmod +x ./run.sh, and then for running: ./run.sh
 
 # variable: name of files
 file=${1:-ISW_1}     #first argument
