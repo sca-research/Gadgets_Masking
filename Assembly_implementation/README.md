@@ -14,7 +14,7 @@ For more clarification, please see [C implementation](https://github.com/sca-res
 
 Testing: (Example with ISW_1)
 
-Download [SCALE](https://github.com/danpage/scale).
+Download [SCALE](https://github.com/danpage/scale). Through the terminal:
 
 `git clone http://www.github.com/danpage/scale.git`
 
@@ -43,6 +43,10 @@ Then:
 `cd ${SCALE_HW}/ISW_1`
 
 `sudo  make --no-builtin-rules -f ${TARGET}/build/lib/scale.mk BSP="${TARGET}/build" USB="/dev/ttyUSB0" PROJECT="isw_1" PROJECT_SOURCES="isw_1.c isw_1.S" clean all program`
+
+or
+
+Copy the **run.sh** file in `scale/hw` directory and via terminal run **./run.sh ISW_1 isw_1**
 
 Then, on the [SCALE board](https://github.com/danpage/scale):
 
