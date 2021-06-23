@@ -1,5 +1,4 @@
 #! /bin/bash
-
 # ./run in terminal: Permission denied, solving: chmod +x ./run.sh, and then for running: ./run
 
 # variable: name of files
