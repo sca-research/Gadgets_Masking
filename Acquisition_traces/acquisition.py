@@ -11,12 +11,14 @@ import secrets
 start_time = time.time()
 
 
+#  The variables that are depend on the individual gadget:
+# Mask_ORD, rnd_gadget, samples, timebase, threshold, xscale
 class Acquisition_Gadget(object):
     if __name__ == "__main__":
         # Serial port communication: look this up in 'device manager'
         port = '/dev/ttyUSB0'  # Serial port
 
-        step = 100
+        step = 100  # Printing the related data on screen after 100 acquisition
 
         # The length of the TX data in Byte (B)
         # For each gadget, just change Mask_ORD and rnd_gadget
@@ -24,22 +26,23 @@ class Acquisition_Gadget(object):
         Mask_ORD = 1
         main_inputs = 2  # input_a: 1B, input_b: 1B
         rnd_masking_inputs = 2 * Mask_ORD  # Mask_ORD B randomness for masking a, Mask_ORD B randomness for masking b
-        rnd_gadget = int(Mask_ORD * (Mask_ORD + 1) / 2)   # ISW_1 multiplication
+        rnd_gadget = int(Mask_ORD * (Mask_ORD + 1) / 2)  # ISW_1 multiplication
         input_len = main_inputs + rnd_masking_inputs + rnd_gadget
 
         # The length of the RX data in Byte (B)
         ##################################################
-        output_len = main_inputs + 2 * (Mask_ORD + 1) + (Mask_ORD + 1) + 1  # byte length of output_c: Mask_ORD + 1 (c = a * b)
+        # output_len = input_a and input_b + shares of input_a, input_b and output_c + gfMUL(a,b)
+        output_len = main_inputs + 3 * (Mask_ORD + 1) + 1  # byte length of output_c: Mask_ORD + 1 (c = a * b)
         print("Output length: ", output_len)
         print("Input length:  ", input_len)
 
-
         # Number of traces
-        N = 1000
+        N = 100000
         # Number of samples
         samples = 10000
 
-        # timebase = (2 ^ 1)/10e-9 = 2ns, sampling rate = 500 MSa/s(Page 22, 3.6 Timebase, Programming with the PicoScope 5000 Series (A API))
+        # timebase = (2 ^ 1)/10e-9 = 2ns, sampling rate = 500 MSa/s
+        # (Page 22, 3.6 Timebase, Programming with the PicoScope 5000 Series (A API))
         timebase = 1
 
         # Initialized random generator for generating inputs and randomness
@@ -92,7 +95,7 @@ class Acquisition_Gadget(object):
         chA = ps.PS5000A_CHANNEL["PS5000A_CHANNEL_A"]
         coupling_type = ps.PS5000A_COUPLING["PS5000A_DC"]
         chA_Range = ps.PS5000A_RANGE["PS5000A_1V"]
-        status["setChA"] = ps.ps5000aSetChannel(chandle, chA, 1, coupling_type, chA_Range, 0)
+        status["setChA"] = ps.ps5000aSetChannel(chandle, chA, 1, coupling_type, chA_Range, 0.1)
         assert_pico_ok(status["setChA"])
 
         # Set up channel B
@@ -127,6 +130,11 @@ class Acquisition_Gadget(object):
         # handle = chandle = ctypes.c_int16()
         source = ps.PS5000A_CHANNEL["PS5000A_CHANNEL_B"]
         # mV2adc(millivolts, range, maxADC): Takes a voltage value and converts it into adc counts
+        # maxADC = ctypes.c_int16(32512) # 32512 the Max value that PicoScope can represent.
+        # however it should be 2 ^ 16 = 65536
+        # when vertical values are represented by integer,
+        # they are always in range (the range of vertical axis) [-32512, 32512]* uint
+        # [-5v, 5V]
         threshold = mV2adc(threshold, chB_Range, ctypes.c_int16(32512))
         direction_rising = ps.PS5000A_THRESHOLD_DIRECTION["PS5000A_RISING"]
         direction_falling = ps.PS5000A_THRESHOLD_DIRECTION["PS5000A_FALLING"]
@@ -152,7 +160,10 @@ class Acquisition_Gadget(object):
         #################################################
         # write_header(self, n, number_of_samples, isint, cryptolen, xscale, yscale):
         data_length = input_len + output_len
-        trs = TRS_TraceSet.TRS_TraceSet("gadget000.trs")
+        trs = TRS_TraceSet.TRS_TraceSet("gadget1.trs")
+        # 65536 = 2 ^ 16
+        # yscale is Vertical UNIT. unit=ChannelA.range/65536.
+        # chA_Range = ps.PS5000A_RANGE["PS5000A_1V"]: 1 V ---> 1\65536
         # timebase = 1: 2/1e9 = 2 ns = 2e-9
         trs.write_header(N, samples, True, data_length, 2E-9, 1 / 65536)
 
@@ -203,6 +214,7 @@ class Acquisition_Gadget(object):
             status["getValues"] = ps.ps5000aGetValues(chandle, 0, point_samples, 0, 0, 0, point_overflow)
             assert_pico_ok(status["getValues"])
 
+            # If Overflow occurs, change the value analogueOffset in ps5000aSetChannel
             if overflow.value != 0:
                 print("overflow!")
 
@@ -215,9 +227,9 @@ class Acquisition_Gadget(object):
             in_a = output[0]
             in_b = output[1]
             shares_a = output[2:Mask_ORD + 3]
-            shares_b = output[Mask_ORD + 3: 2*Mask_ORD + 4]
-            shares_ab = output[2 * Mask_ORD + 4: 3*Mask_ORD + 5]
-            gmul = output[3*Mask_ORD + 5]
+            shares_b = output[Mask_ORD + 3: 2 * Mask_ORD + 4]
+            shares_ab = output[2 * Mask_ORD + 4: 3 * Mask_ORD + 5]
+            gmul: int = output[3 * Mask_ORD + 5]
 
             a = 0
             b = 0
@@ -243,8 +255,12 @@ class Acquisition_Gadget(object):
                 print('- a: {}, b: {}'.format(hex(in_a), hex(in_b)))
                 print('- shares_a: [{}], shares_b: [{}]'.format(shares_a.hex(), shares_b.hex()))
                 print('- ab: {}, shares_ab:[{}]'.format(hex(ab), shares_ab.hex()))
-                # print('- gfm: {}'.format(hex(gmul)))
+                print('- gfm: {}'.format(hex(gmul)))
                 print('___________________________________________________________________')
+        # Closing the trs file
+        #################################################
         trs.close()
     print("The number of traces:", i)
-print("Duration of acquistion (sec):",(time.time() - start_time))
+
+
+print("Duration of acquisition (sec):", (time.time() - start_time))
