@@ -8,7 +8,7 @@ uint8_t gmul(uint8_t a, uint8_t b);
 /*The number of shares: Mask_order+1: 3+1=4*/
 int  share_n = 4;
 
-/*The number of randomness for BBPP_": 4
+/*The number of randomness for BBPP_3": 4
 The number of randomness for masking the inputs: 2* Mask_order: 2*3=6
  Total rnd = 4 + 6 =10*/
 //int rnd_n = 10;
