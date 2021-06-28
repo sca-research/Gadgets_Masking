@@ -264,3 +264,17 @@ class Acquisition_Gadget(object):
 
 
 print("Duration of acquisition (sec):", (time.time() - start_time))
+
+
+#n case of ISW_1, the period is 20us.
+
+# The clock of Scale board is 12 MHz : period =  1 / 12 MHz = 88.3 ns.
+
+# 20us\88.3 = 226.5 (the number of clocks for the ISW_1).
+
+# Sampling each clock with 40 points: 40 * 226.5 = 10 K sample (the whole sampling points for  ISW_1).
+
+# Sampling rate: period = 20us, samples = 10Ks: 10K s / 20us = 500 Msample/S.
+
+# timebase = 1 / Sampling rate: 1/500MS = 2 ns, according to the table in AAP5000, timebase for 2ns is 1.
+
