@@ -6,7 +6,7 @@
 Traces are recorded by [Pico oscilloscope 5000a](https://www.picotech.com/products/oscilloscope).
 
 This explanation is related to ISW_1, but it is compatible with other gadgets. 
-1. Finding the execution time of the gadget.
+1. Finding the execution time of the gadget (**pico.png**).
 - Programming the [SCALE board](https://github.com/danpage/scale):
   (Please read [this page](https://github.com/sca-research/Gadgets_Masking/tree/main/Assembly_implementation))
   
