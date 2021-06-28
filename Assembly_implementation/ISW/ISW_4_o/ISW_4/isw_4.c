@@ -20,7 +20,7 @@ int main( int argc, char* argv[]){
 
     uint8_t rnd_a[share_n - 1];
     uint8_t rnd_b[share_n - 1];
-    uint8_t rnd_isw[6];
+    uint8_t rnd_isw[10rnd_isw];
 
     uint8_t in_a;
     uint8_t in_b;
