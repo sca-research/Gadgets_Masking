@@ -1,5 +1,7 @@
 # Galois field multiplication based on Log_Exp: GF(2^8)
 
+c = a * b, where a, b and c are one share.
+
 
 **gf_mul.S** is the implementation of GF(2^8) (gfmul(a,b,c), c = a * b) for ARM Cortex-M0/3 in GNU assembly, with THUMB-16 instructions.
 The multiplication is based on Log_Ex with table.
