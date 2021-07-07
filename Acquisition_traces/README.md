@@ -1,6 +1,5 @@
 ### Acquisition
-**AIM**: Capturing the power of 32-bit ARM Cortex-M3 microprocessor 
-(situated on [SCALE board](https://github.com/danpage/scale)) while it is executing 
+**AIM**: Capturing the power of 32-bit ARM Cortex-M3 microprocessor while it is executing 
 [multiplication gadgets]((https://github.com/sca-research/Gadgets_Masking/tree/main/Assembly_implementation)) written in Assembly Thumb-16 instructions.
 
 Traces are recorded by [Pico oscilloscope 5000a](https://www.picotech.com/products/oscilloscope).
