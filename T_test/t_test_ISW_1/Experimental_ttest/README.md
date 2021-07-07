@@ -40,3 +40,12 @@ and capturing the power in trs file via oscilloscope.
 
 
  
+### The pictures are the result of the below setup:
+
+Acquisition:
+
+
+Traces are recorded by [Pico oscilloscope 5000a](https://www.picotech.com/products/oscilloscope).
+
+the gadget is run on [SCALE board](https://github.com/danpage/scale).
+
