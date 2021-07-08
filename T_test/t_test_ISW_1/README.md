@@ -1,5 +1,5 @@
 ### T-test
-**AIM**: Redusing the leakage points in ISW_1 
+**AIM**: Decreasing the leakage points in T_test for ISW_1 
 
 
 **leakage Detection** is carried out by using **T-test** on
