@@ -10,9 +10,9 @@ GNU Assembly with THUMB-16 instructions,
 There are two **T-test**s:
 1) **T-test** is applied on real power traces.
    This means, while "multiplication gadget" is executing on ARM cortex-M0/3,
-   the corresponding traces are recorded by an oscilloscope.
+   the corresponding power traces are recorded by an oscilloscope.
    In this experiment, in order to reduce the physical effects of the device, 
-   the capturing is carried out randomly.
+   the capturing of power traces for fixed and random inputs is performed randomly.
    Please see **acquisition.py**.
    
 2) **T-test** based on simulated power traces.
