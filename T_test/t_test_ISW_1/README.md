@@ -3,7 +3,7 @@
 
 
 **leakage Detection** is carried out by using **T-test** on
-"Multiplication gadgets" (writen for ARM cortex-M0/3 in
+"Multiplication gadgets" (written for ARM cortex-M0/3 in
 GNU Assembly with THUMB-16 instructions,
 [this page](https://github.com/sca-research/Gadgets_Masking/tree/main/Assembly_implementation)).
 
