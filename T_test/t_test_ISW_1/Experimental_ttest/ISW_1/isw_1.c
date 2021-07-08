@@ -12,9 +12,6 @@ int  share_n = 2;
 
 /*The number of randomness for gadget: ISW: share_n *(share_n - 1)/2 */
 // int rnd_gadget = share_n *(share_n - 1)/2;
-/*The number of randomness for masking the inputs: 2* Mask_order (share_n - 1)*/
-// int rnd_mask_in = 2 * (share_n - 1);
-// rnd_gadget
 int rnd_n = 1;
 
 int main( int argc, char* argv[]){
