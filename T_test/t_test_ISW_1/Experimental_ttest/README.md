@@ -27,12 +27,12 @@ several steps have to be performed.
 
 **test.py**: Checking the correctness of the gadget.
 
-**acquisition.py**: Transferring data between Microcontroller and Pc,
+**acquisition.py**: Transferring data between Microcontroller and PC,
 and capturing the power in trs file via oscilloscope.
 
 **analysis_trs.py**: For analysing the data and powers.
 
-**t_test.py**: performing T-test.
+**t_test.py**: Performing T-test.
 
 
 
@@ -42,7 +42,7 @@ and capturing the power in trs file via oscilloscope.
  
 ### The pictures are the result of the below setup:
 
-Traces are recorded by [Pico oscilloscope 5000a](https://www.picotech.com/products/oscilloscope).
+Traces are measured by [Pico oscilloscope 5000a](https://www.picotech.com/products/oscilloscope).
 
 The gadget is run on [SCALE board](https://github.com/danpage/scale).
 
