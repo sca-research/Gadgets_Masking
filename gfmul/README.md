@@ -2,6 +2,8 @@
 
 c = a * b, where a, b and c are one share.
 
+The function **gfmul** is used in all gadget for computing a[i] * b[i].
+
 
 **gf_mul.S** is the implementation of GF(2^8) (gfmul(a,b,c), c = a * b) for ARM Cortex-M0/3 in GNU assembly, with THUMB-16 instructions.
 The multiplication is based on Log_Ex with table.
