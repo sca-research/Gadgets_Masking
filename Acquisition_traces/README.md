@@ -51,7 +51,7 @@ For example, in case of ISW_1, the period is 20us.
     
     Sampling each clock with 40 points: 40 * 216 = 10 K sample (the whole sampling points for  ISW_1).
     
-    Sampling rate: period = 20us, samples = 10Ks: 10K s / 20us = 500 Msample/S.
+    Sampling rate: period = 18us, samples = 10Ks: 10K s / 18us = 500 Msample/S.
     
     timebase = 1 / Sampling rate: 1/500MS = 2 ns, according to the table in AAP5000, timebase for 2ns is 1.
   
